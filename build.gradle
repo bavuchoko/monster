@@ -28,14 +28,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'junit:junit:4.13.1'
     compileOnly 'org.projectlombok:lombok'
     testRuntimeOnly  'com.h2database:h2'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
-
+    implementation group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.5.RELEASE'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.5.2'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
     implementation 'org.springframework.boot:spring-boot-devtools'
 }

@@ -1,4 +1,4 @@
-package com.example.monster.member;
+package com.example.monster.members;
 
 
 import lombok.*;
