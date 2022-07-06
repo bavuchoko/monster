@@ -1,5 +1,6 @@
 package com.example.monster.member;
 
+import com.example.monster.common.AppProperties;
 import com.example.monster.members.Member;
 import com.example.monster.members.MemberRepository;
 import com.example.monster.members.MemberRole;
@@ -34,15 +35,16 @@ public class MemberServiceTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    AppProperties appProperties;
+
     @Test
     public void findByUsername() {
 
         //Given
-        String password = "pjs";
-        String email = "jonsgu@email.com";
         Member member = Member.builder()
-                .email(email)
-                .password(password)
+                .email(appProperties.getUserUsername())
+                .password(appProperties.getUserPassword())
                 .roles(Set.of(MemberRole.ADMIN,MemberRole.USER))
                 .build();
 
@@ -50,10 +52,9 @@ public class MemberServiceTest {
 
         //When
         UserDetailsService userDetailsService =memberService;
-        UserDetails jonsgu = userDetailsService.loadUserByUsername(email);
-
+        UserDetails jonsgu = userDetailsService.loadUserByUsername(appProperties.getUserUsername());
         //Then
-        assertThat(passwordEncoder.matches(password, jonsgu.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches(appProperties.getUserPassword(), jonsgu.getPassword())).isTrue();
     }
 
     @Test

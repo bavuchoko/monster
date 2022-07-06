@@ -25,6 +25,7 @@ public class MemberService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
 
     public Member saveMember(Member member) {
+        String aaa = member.getPassword();
         member.setPassword(this.passwordEncoder.encode(member.getPassword()));
         return this.memberRepository.save(member);
     }
@@ -32,10 +33,7 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException(username));
-        return new User(member.getEmail(), member.getPassword(), authorities(member.getRoles()));
+        return new MemberAdapter(member);
     }
 
-    private Collection<? extends GrantedAuthority> authorities(Set<MemberRole> roles) {
-        return  roles.stream().map( r -> new SimpleGrantedAuthority("ROLE_" + r.name())).collect(Collectors.toSet());
-    }
 }
