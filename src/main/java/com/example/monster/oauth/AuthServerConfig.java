@@ -1,5 +1,6 @@
-package com.example.monster.common;
+package com.example.monster.oauth;
 
+import com.example.monster.common.AppProperties;
 import com.example.monster.members.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +13,15 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
+import javax.sql.DataSource;
+
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Autowired
+    DataSource dataSource;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -30,7 +36,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     TokenStore tokenStore;
 
     @Autowired
-    AppProperties  appProperties;
+    AppProperties appProperties;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {

@@ -1,6 +1,7 @@
 package com.example.monster.common;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,4 +27,8 @@ public class AppProperties {
     private String clientId;
     @NotEmpty
     private String clientSecret;
+    @NotEmpty
+    private String publicKey;
+
+
 }

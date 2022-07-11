@@ -1,5 +1,8 @@
-package com.example.monster.common;
+package com.example.monster.oauth;
 
+import com.example.monster.common.AppProperties;
+import com.example.monster.common.BaseControllerTest;
+import com.example.monster.common.TestDescription;
 import com.example.monster.members.MemberService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class AuthServerConfigTest extends BaseControllerTest{
+public class AuthServerConfigTest extends BaseControllerTest {
 
     @Autowired
     MemberService memberService;

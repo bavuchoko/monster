@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 
@@ -29,14 +30,14 @@ public class SecurityConfig {
 //                .withUser("user").password("password").roles("USER");
 //    }
 
-//    @Bean
-//    public TokenStore tokenStore() {
-//        return new JdbcTokenStore(dataSource);
-//    }
     @Bean
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return new JdbcTokenStore(dataSource);
     }
+//    @Bean
+//    public TokenStore tokenStore() {
+//        return new InMemoryTokenStore();
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

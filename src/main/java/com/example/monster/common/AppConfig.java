@@ -38,18 +38,18 @@ public class AppConfig {
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                Member admin = Member.builder()
-                        .email(appProperties.getAdminUsername())
-                        .password(appProperties.getAdminPassword())
-                        .roles(Set.of(MemberRole.ADMIN, MemberRole.USER))
-                        .build();
-                memberService.saveMember(admin);
-                Member user = Member.builder()
-                        .email(appProperties.getUserUsername())
-                        .password(appProperties.getUserPassword())
-                        .roles(Set.of(MemberRole.USER))
-                        .build();
-                memberService.saveMember(user);
+//                Member admin = Member.builder()
+//                        .email(appProperties.getAdminUsername())
+//                        .password(appProperties.getAdminPassword())
+//                        .roles(Set.of(MemberRole.ADMIN, MemberRole.USER))
+//                        .build();
+//                memberService.saveMember(admin);
+//                Member user = Member.builder()
+//                        .email(appProperties.getUserUsername())
+//                        .password(appProperties.getUserPassword())
+//                        .roles(Set.of(MemberRole.USER))
+//                        .build();
+//                memberService.saveMember(user);
             }
         };
     }
