@@ -46,7 +46,10 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()).antMatchers("/docs/api.html");
+        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .antMatchers("/docs/api.html")
+                .antMatchers("/hello")
+                .antMatchers("/hello/**");
     }
 
 
