@@ -52,6 +52,7 @@ bootJar {
         from "${asciidoctor.outputDir}"
         into 'BOOT-INF/classes/static/docs'
     }
+    mainClass = 'com.example.monster.MonsterApplication'
 }
 tasks.named('test') {
     outputs.dir snippetsDir
