@@ -6,6 +6,7 @@ import com.example.monster.common.TestDescription;
 import com.example.monster.members.MemberService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,6 +22,7 @@ public class AuthServerConfigTest extends BaseControllerTest {
 
     @Autowired
     AppProperties appProperties;
+
 
 
     @Test
