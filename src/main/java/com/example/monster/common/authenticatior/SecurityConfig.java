@@ -1,4 +1,4 @@
-package com.example.monster.common;
+package com.example.monster.common.authenticatior;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -32,9 +32,7 @@ public class SecurityConfig {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .inMemoryAuthentication()
-            .withUser("user@email.com").password("{noop}user").roles("USER");
+
     }
 
     @Bean
@@ -65,6 +63,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .csrf().disable()
                 .authorizeRequests()
                 .mvcMatchers("/admin/*").hasRole("ADMIN")
                 .mvcMatchers(HttpMethod.GET,"/api/board/**").permitAll()

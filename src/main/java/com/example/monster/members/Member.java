@@ -21,7 +21,8 @@ public class Member implements Serializable {
     @GeneratedValue
     private Integer id;
     @Column(unique = true)
-    private String email;
+    private String username;
+
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
