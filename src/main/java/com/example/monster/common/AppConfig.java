@@ -1,5 +1,6 @@
 package com.example.monster.common;
 
+import com.example.monster.common.AppProperties;
 import com.example.monster.members.Member;
 import com.example.monster.members.MemberRole;
 import com.example.monster.members.MemberService;

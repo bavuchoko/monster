@@ -1,6 +1,6 @@
 package com.example.monster.members;
 
-import com.example.monster.common.RedisUtil;
+import com.example.monster.common.redis.RedisUtil;
 import com.example.monster.common.authenticatior.CookieUtil;
 import com.example.monster.common.authenticatior.JwtUtil;
 import lombok.RequiredArgsConstructor;

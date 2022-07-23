@@ -1,4 +1,4 @@
-package com.example.monster.common;
+package com.example.monster.common.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

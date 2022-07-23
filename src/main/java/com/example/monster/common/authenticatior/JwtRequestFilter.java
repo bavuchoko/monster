@@ -1,6 +1,6 @@
 package com.example.monster.common.authenticatior;
 
-import com.example.monster.common.RedisUtil;
+import com.example.monster.common.redis.RedisUtil;
 import com.example.monster.members.MemberDto;
 import com.example.monster.members.MemberService;
 import io.jsonwebtoken.ExpiredJwtException;
