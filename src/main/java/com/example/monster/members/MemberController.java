@@ -1,5 +1,7 @@
 package com.example.monster.members;
 
+import com.example.monster.common.errors.customExceptions.CustomException;
+import com.example.monster.common.errors.customExceptions.InvalidParameterException;
 import com.example.monster.common.redis.RedisUtil;
 import com.example.monster.common.authenticatior.CookieUtil;
 import com.example.monster.common.authenticatior.JwtUtil;
@@ -17,11 +19,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.net.URI;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -50,7 +54,7 @@ public class MemberController {
 //    }
 
     @PostMapping("/join")
-    public ResponseEntity signUpUser(MemberDto memberDto){
+    public ResponseEntity signUpUser(@Valid MemberDto memberDto, Errors errors){
         Member member = modelMapper.map(memberDto, Member.class);
         Member savedUser = memberService.saveMember(member);
 
@@ -76,18 +80,23 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Member member,
+    public ResponseEntity login(@RequestBody @Valid MemberDto memberDto, Errors errors,
                           HttpServletRequest req,
                           HttpServletResponse res) {
+        if(errors.hasErrors()){
+
+//            throw new InvalidParameterException(errors);
+            return badRequest(errors);
+        }
         try {
-            Member user = memberService.loginUser(member.getUsername(), member.getPassword());
-            MemberDto memberDto = modelMapper.map(user, MemberDto.class);
-            final String token = jwtUtil.generateToken(memberDto);
-            final String refreshJwt = jwtUtil.generateRefreshToken(memberDto);
+            Member user = memberService.loginUser(memberDto.getUsername(), memberDto.getPassword());
+            MemberDto logedinMember = modelMapper.map(user, MemberDto.class);
+            final String token = jwtUtil.generateToken(logedinMember);
+            final String refreshJwt = jwtUtil.generateRefreshToken(logedinMember);
             Cookie accessToken = cookieUtil.createCookie(JwtUtil.ACCESS_TOKEN_NAME, token);
             Cookie refreshToken = cookieUtil.createCookie(JwtUtil.REFRESH_TOKEN_NAME, refreshJwt);
 
-            redisUtil.setDataExpire(refreshJwt, memberDto.getUsername(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+            redisUtil.setDataExpire(refreshJwt, logedinMember.getUsername(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
             res.addCookie(accessToken);
             res.addCookie(refreshToken);
             return ResponseEntity.ok()
@@ -100,4 +109,13 @@ public class MemberController {
         }
     }
 
+    //Todo 추후 Errors를 좀더 커스텀하고싶다
+//    private ResponseEntity<EntityModel<CustomException>> badRequest(CustomException errors) {
+//        return ResponseEntity.badRequest().body(EntityModel.of(errors).add(linkTo(MemberController.class).withRel("index")));
+//    }
+
+
+    private ResponseEntity<EntityModel<Errors>> badRequest(Errors errors) {
+        return ResponseEntity.badRequest().body(EntityModel.of(errors).add(linkTo(MemberController.class).withRel("index")));
+    }
 }

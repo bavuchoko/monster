@@ -4,6 +4,7 @@ package com.example.monster.members;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public class Member implements Serializable {
     @GeneratedValue
     private Integer id;
     @Column(unique = true)
+
     private String username;
 
     private String password;
