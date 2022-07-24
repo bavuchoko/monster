@@ -116,6 +116,6 @@ public class MemberController {
 
 
     private ResponseEntity<EntityModel<Errors>> badRequest(Errors errors) {
-        return ResponseEntity.badRequest().body(EntityModel.of(errors).add(linkTo(MemberController.class).withRel("index")));
+        return ResponseEntity.badRequest().body(EntityModel.of(errors).add(linkTo(MemberController.class).slash("/join").withRel("redirect")));
     }
 }
