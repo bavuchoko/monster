@@ -109,7 +109,7 @@ public class MemberController {
         }
     }
 
-    //Todo 추후 Errors를 좀더 커스텀하고싶다
+    //Todo 추후 Errors를 좀더 커스텀하고싶음.
 //    private ResponseEntity<EntityModel<CustomException>> badRequest(CustomException errors) {
 //        return ResponseEntity.badRequest().body(EntityModel.of(errors).add(linkTo(MemberController.class).withRel("index")));
 //    }
