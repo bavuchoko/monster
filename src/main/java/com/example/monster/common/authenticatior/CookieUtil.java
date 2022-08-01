@@ -1,5 +1,6 @@
 package com.example.monster.common.authenticatior;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -8,10 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class CookieUtil {
 
+    @Value("${spring.jwt.token-validity-in-seconds}")
+    private long tokenValidityInSeconds;
+
     public Cookie createCookie(String cookieName, String value){
         Cookie token = new Cookie(cookieName,value);
         token.setHttpOnly(true);
-        token.setMaxAge((int)JwtUtil.TOKEN_VALIDATION_SECOND);
+        token.setMaxAge((int)tokenValidityInSeconds);
         token.setPath("/");
         return token;
     }
