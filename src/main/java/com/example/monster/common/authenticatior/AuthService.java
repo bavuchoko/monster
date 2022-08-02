@@ -4,6 +4,7 @@ import com.example.monster.common.redis.RedisUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -28,26 +29,26 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisUtil redisUtil;
 
-    public TokenDto authirize(String username, String pass, HttpServletResponse res) {
+    public TokenDto authirize(String username, String pass, HttpServletResponse res) throws BadCredentialsException{
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username, pass);
 
-        Authentication authentication = authenticationManagerBuilder.getObject()
-                .authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String accessToken = tokenProvider.createToken(authentication, TokenType.ACCESS_TOKEN);
-        TokenDto tokenDto = TokenDto.builder()
-                .token(accessToken)
-                .username(authentication.getName())
-                .build();
+            Authentication authentication = authenticationManagerBuilder.getObject()
+                    .authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String accessToken = tokenProvider.createToken(authentication, TokenType.ACCESS_TOKEN);
+            TokenDto tokenDto = TokenDto.builder()
+                    .code("200")
+                    .token(accessToken)
+                    .username(authentication.getName())
+                    .message("로그인에 성공하였습니다.")
+                    .build();
 
+            String refreshToken = tokenProvider.createToken(authentication, TokenType.REFRESH_TOKEN);
+            redisUtil.setData(refreshToken, authentication.getName());
+            Cookie refreshTokenCookie = cookieUtil.createCookie("refreshToken", refreshToken);
+            res.addCookie(refreshTokenCookie);
 
-        String refreshToken = tokenProvider.createToken(authentication, TokenType.REFRESH_TOKEN);
-
-        redisUtil.setData(refreshToken, authentication.getName());
-
-        Cookie refreshTokenCookie = cookieUtil.createCookie("refreshToken", refreshToken);
-        res.addCookie(refreshTokenCookie);
         return tokenDto;
     }
 
@@ -79,8 +80,9 @@ public class AuthService {
         return null;
     }
 
-    public void logout(String accessToken, String refreshToken) {
-        redisUtil.deleteData(refreshToken);
+    public void logout(HttpServletRequest req) {
+        String refreshTokenInCookie = cookieUtil.getCookie(req, TokenType.REFRESH_TOKEN.getValue()).getValue();
+        redisUtil.deleteData(refreshTokenInCookie);
     }
 
 

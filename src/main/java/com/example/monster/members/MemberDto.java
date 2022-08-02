@@ -23,5 +23,7 @@ public class MemberDto {
     private String password;
 
     private Set<MemberRole> roles;
+
+    private String token;
 }
 
