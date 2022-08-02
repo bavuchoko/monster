@@ -56,7 +56,7 @@ public class AuthService {
         String username = tokenProvider.getAuthentication(timeOutedAccessToken.getToken()).getName();
         String refreshTokenInCookie = cookieUtil.getCookie(req, TokenType.REFRESH_TOKEN.getValue()).getValue();
         //사용자가 다름
-        if(tokenProvider.validateToken(refreshTokenInCookie) && compareRefreshTokenOwner(username, refreshTokenInCookie)){
+        if(tokenProvider.validateToken(refreshTokenInCookie, req) && compareRefreshTokenOwner(username, refreshTokenInCookie)){
             Authentication authentication = tokenProvider.getAuthentication(refreshTokenInCookie);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String newAccessToken = tokenProvider.createToken(authentication, TokenType.ACCESS_TOKEN);
@@ -71,7 +71,7 @@ public class AuthService {
             return null;
         }
         //유효하지 않은 토큰
-        if (!tokenProvider.validateToken(refreshTokenInCookie)) {
+        if (!tokenProvider.validateToken(refreshTokenInCookie, req)) {
             //Todo exception추가
             return null;
         }

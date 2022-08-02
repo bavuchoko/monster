@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -97,7 +98,8 @@ public class TokenProvider implements InitializingBean {
 	 	토큰을 파싱하고 발생하는 예외를 처리, 문제가 있을 경우 false 반환
 	 */
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, HttpServletRequest request) {
+
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -105,10 +107,13 @@ public class TokenProvider implements InitializingBean {
             logger.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             logger.info("만료된 JWT 토큰입니다.");
+            request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
             logger.info("지원되지 않는 JWT 토큰입니다.");
+            request.setAttribute("exception", ErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
             logger.info("JWT 토큰이 잘못되었습니다.");
+            request.setAttribute("exception", ErrorCode.ILLEGALARGU_TOKEN);
         }
         return false;
     }
