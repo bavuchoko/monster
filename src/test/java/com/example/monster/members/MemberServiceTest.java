@@ -23,7 +23,7 @@ public class MemberServiceTest extends BaseControllerTest {
     MemberService memberService;
 
     @Autowired
-    MemberRepository memberRepository;
+    MemberJapRepository memberJapRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;

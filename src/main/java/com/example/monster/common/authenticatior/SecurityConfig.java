@@ -81,7 +81,7 @@ public class SecurityConfig {
 
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/auth/**").permitAll()
+                    .antMatchers("/api/**").permitAll()
                     .mvcMatchers("/admin/*").hasRole("ADMIN")
                     .anyRequest().authenticated()
 

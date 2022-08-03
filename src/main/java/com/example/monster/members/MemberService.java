@@ -19,7 +19,7 @@ import java.util.Optional;
 public class MemberService implements UserDetailsService {
 
     @Autowired
-    MemberRepository memberRepository;
+    MemberJapRepository memberJapRepository;
 
 
     private final PasswordEncoder passwordEncoder;
@@ -30,18 +30,18 @@ public class MemberService implements UserDetailsService {
         System.out.println(member.getPassword());
         member.setPassword(this.passwordEncoder.encode(member.getPassword()));
         String aa = this.passwordEncoder.encode("user");
-        return this.memberRepository.save(member);
+        return this.memberJapRepository.save(member);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException(username));
+        Member member = memberJapRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException(username));
         return new MemberAdapter(member);
     }
 
 
     public Member loginUser(String username, String password) throws UsernameNotFoundException, BadCredentialsException {
-        Optional<Member> member = memberRepository.findByUsername(username);
+        Optional<Member> member = memberJapRepository.findByUsername(username);
         if(member.isEmpty()){
             throw new UsernameNotFoundException("username does not exist : 존재하지 않는 아이디 입니다.");
         }
@@ -56,7 +56,7 @@ public class MemberService implements UserDetailsService {
     }
 
     public Page<Member> loadUserList(Pageable pagable){
-        return this.memberRepository.findAll(pagable);
+        return this.memberJapRepository.findAll(pagable);
     }
 
 }

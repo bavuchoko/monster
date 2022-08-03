@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MemberControllerTest extends BaseControllerTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    MemberJapRepository memberJapRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;

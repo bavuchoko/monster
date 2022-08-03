@@ -20,6 +20,7 @@ public class Member implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "member_id")
     private Integer id;
     @Column(unique = true)
 
