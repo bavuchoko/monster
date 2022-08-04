@@ -46,7 +46,6 @@ public class SecurityConfig {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(memberService).passwordEncoder(passwordEncoder);
-        auth.inMemoryAuthentication().withUser("test@email.com").password("{noop}test").roles("USER");
     }
 
 
