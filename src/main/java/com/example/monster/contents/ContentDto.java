@@ -2,9 +2,9 @@ package com.example.monster.contents;
 
 import com.example.monster.members.Member;
 import com.example.monster.members.MemberDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -16,24 +16,31 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContentDto {
 
+    private static ModelMapper modelMapper = new ModelMapper();
 
-    @NotEmpty
     private Category category;
     @NotEmpty
     private String title;
     @NotEmpty
     private String body;
-    @NotEmpty
+    @NotNull
     private LocalDateTime writeTime;
-    @NotEmpty
+
     private LocalDateTime updateTime;
     @Min(0)
     private int hitCout;
-    @NotNull
-    private MemberDto memberDto;
 
-    private List<RepliesDto> repliesDtoList;
+    private List<Replies> replies;
+
+    public Content of() {
+        modelMapper.getConfiguration()
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+        return modelMapper.map(this, Content.class);
+    }
 
 }

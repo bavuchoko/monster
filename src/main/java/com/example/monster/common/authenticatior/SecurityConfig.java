@@ -1,13 +1,12 @@
 package com.example.monster.common.authenticatior;
 
+import com.example.monster.common.AppProperties;
 import com.example.monster.common.authenticatior.filter.JwtAccessDeniedHandler;
 import com.example.monster.common.authenticatior.filter.JwtAuthenticationEntryPoint;
-import com.example.monster.common.authenticatior.filter.JwtFilter;
-import org.apache.catalina.filters.CorsFilter;
+import com.example.monster.members.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,14 +16,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.sql.DataSource;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -41,13 +35,19 @@ public class SecurityConfig {
     }
 
     @Autowired
+    AppProperties appProperties;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
+    MemberService memberService;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
+        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder);
+        auth.inMemoryAuthentication().withUser("test@email.com").password("{noop}test").roles("USER");
     }
-
 
 
     @Bean
@@ -58,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .antMatchers("/docs/api.html")
+                .antMatchers("/docs/asciidoc/api.html")
                 .antMatchers("/hello")
                 .antMatchers("/hello/**");
     }
@@ -81,8 +81,8 @@ public class SecurityConfig {
 
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/**").permitAll()
-                    .mvcMatchers("/admin/*").hasRole("ADMIN")
+                    .mvcMatchers("/api/**").permitAll()
+                    .antMatchers("/admin/*").hasRole("ADMIN")
                     .anyRequest().authenticated()
 
                 .and()

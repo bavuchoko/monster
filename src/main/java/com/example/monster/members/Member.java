@@ -15,18 +15,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
-public class Member implements Serializable {
+public class Member {
 
 
     @Id
     @GeneratedValue
     @Column(name = "member_id")
     private Integer id;
+
     @Column(unique = true)
-
     private String username;
-
     private String password;
+    private String nickname;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)

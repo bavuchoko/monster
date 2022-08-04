@@ -3,6 +3,7 @@ package com.example.monster.members;
 import com.example.monster.common.AppProperties;
 import com.example.monster.common.BaseControllerTest;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,6 +31,11 @@ public class MemberServiceTest extends BaseControllerTest {
 
     @Autowired
     AppProperties appProperties;
+
+    @BeforeEach
+    public void delete() {
+        memberJapRepository.deleteAll();
+    }
 
     @Test
     public void findByUsername() {

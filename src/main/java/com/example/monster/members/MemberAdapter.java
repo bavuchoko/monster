@@ -25,7 +25,7 @@ public class MemberAdapter extends User {
                 .collect(Collectors.toSet());
     }
 
-    public Member getAccount() {
+    public Member getMember() {
         return member;
     }
 }

@@ -28,7 +28,7 @@ import java.net.URI;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping(value = "/user",  produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value = "/api/user",  produces = MediaTypes.HAL_JSON_VALUE)
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -50,6 +50,8 @@ public class MemberController {
         return ResponseEntity.ok().body(pageResources);
     }
 
+
+    @PostMapping("/join")
 
 
     //Todo 추후 Errors를 좀더 커스텀하고싶음.

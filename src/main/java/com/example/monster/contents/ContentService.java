@@ -15,4 +15,8 @@ public class ContentService {
     public Page<Content> getContentListAll(Pageable pageable) {
         return contentJpaRepository.findAll(pageable);
     }
+
+    public Content createContent(Content content) {
+        return contentJpaRepository.save(content);
+    }
 }

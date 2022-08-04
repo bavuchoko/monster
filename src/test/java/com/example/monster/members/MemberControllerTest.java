@@ -3,6 +3,7 @@ package com.example.monster.members;
 import com.example.monster.common.AppProperties;
 import com.example.monster.common.BaseControllerTest;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
@@ -25,11 +26,17 @@ public class MemberControllerTest extends BaseControllerTest {
     @Autowired
     AppProperties appProperties;
 
+    @BeforeEach
+    public void delete() {
+        memberJapRepository.deleteAll();
+    }
+
+
     @Test
     public void loginTest() throws Exception {
 
         Member member = Member.builder()
-                .username("user@email.com")
+                .username("user2@email.com")
                 .password("user")
                 .build();
 

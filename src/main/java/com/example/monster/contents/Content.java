@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.engine.internal.Cascade;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,13 @@ public class Content {
     @JoinColumn(name="member_id")
     @JsonSerialize(using = MemverSerializer.class)
     private Member member;
+
+    public void orMemeber(Member member) {
+        this.member =member;
+    }
+    public void orCategory(Category category) {
+        this.category =category;
+    }
 
     @OneToMany(cascade=CascadeType.PERSIST)
     @JoinColumns(value = {

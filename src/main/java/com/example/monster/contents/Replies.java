@@ -2,6 +2,8 @@ package com.example.monster.contents;
 
 
 import com.example.monster.members.Member;
+import com.example.monster.members.MemverSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +30,6 @@ public class Replies implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
+    @JsonSerialize(using = MemverSerializer.class)
     private Member member;
 }

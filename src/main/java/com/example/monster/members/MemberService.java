@@ -27,15 +27,14 @@ public class MemberService implements UserDetailsService {
 
 
     public Member saveMember(Member member) {
-        System.out.println(member.getPassword());
         member.setPassword(this.passwordEncoder.encode(member.getPassword()));
-        String aa = this.passwordEncoder.encode("user");
         return this.memberJapRepository.save(member);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberJapRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException(username));
+        Member member = memberJapRepository.findByUsername(username)
+                .orElseThrow(()->new UsernameNotFoundException(username));
         return new MemberAdapter(member);
     }
 

@@ -39,8 +39,7 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity authorize(@Valid @RequestBody MemberDto memberDto, Errors errors, HttpServletResponse res) {
-
-
+        
         if(errors.hasErrors()){
             TokenDto failToken =TokenDto.builder()
                                 .code("000")

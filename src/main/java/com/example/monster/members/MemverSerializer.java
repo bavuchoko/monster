@@ -13,6 +13,7 @@ public class MemverSerializer extends JsonSerializer<Member> {
         gen.writeStartObject();
         gen.writeNumberField("id", value.getId());
         gen.writeStringField("username", value.getUsername());
+        gen.writeStringField("nickname", value.getNickname());
         gen.writeEndObject();
     }
 }
