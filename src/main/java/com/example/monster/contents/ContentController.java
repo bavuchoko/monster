@@ -1,8 +1,8 @@
 package com.example.monster.contents;
 
 
-import com.example.monster.account.CurrentUser;
-import com.example.monster.account.entity.Account;
+import com.example.monster.accounts.CurrentUser;
+import com.example.monster.accounts.entity.Account;
 import com.example.monster.contents.dto.ContentDto;
 import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.service.ContentService;
@@ -15,6 +15,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +46,10 @@ public class ContentController {
     }
 
     @PostMapping("{category}")
+    @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity createContent(
             @RequestBody @Valid ContentDto contentDto, Errors errors,
-            @PathVariable("category") String category,
+            @PathVariable String category,
             @CurrentUser Account account) {
         if (errors.hasErrors()) {
             return badRequest(errors);

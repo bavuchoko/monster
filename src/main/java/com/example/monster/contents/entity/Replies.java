@@ -1,7 +1,7 @@
 package com.example.monster.contents.entity;
 
 
-import com.example.monster.account.entity.Account;
+import com.example.monster.accounts.entity.Account;
 import com.example.monster.common.serializers.AccountSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;

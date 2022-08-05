@@ -1,6 +1,6 @@
 package com.example.monster.common.serializers;
 
-import com.example.monster.account.entity.Account;
+import com.example.monster.accounts.entity.Account;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;

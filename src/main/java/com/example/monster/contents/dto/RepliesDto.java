@@ -1,6 +1,6 @@
 package com.example.monster.contents.dto;
 
-import com.example.monster.account.dto.AccountDto;
+import com.example.monster.accounts.dto.AccountDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
