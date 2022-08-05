@@ -3,10 +3,9 @@ package com.example.monster.oauth;
 import com.example.monster.common.AppProperties;
 import com.example.monster.common.BaseControllerTest;
 import com.example.monster.common.TestDescription;
-import com.example.monster.members.MemberService;
+import com.example.monster.account.service.AccountService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -18,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AuthServerConfigTest extends BaseControllerTest {
 
     @Autowired
-    MemberService memberService;
+    AccountService accountService;
 
     @Autowired
     AppProperties appProperties;

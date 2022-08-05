@@ -1,8 +1,11 @@
 package com.example.monster.contents;
 
 
-import com.example.monster.members.CurrentUser;
-import com.example.monster.members.Member;
+import com.example.monster.account.CurrentUser;
+import com.example.monster.account.entity.Account;
+import com.example.monster.contents.dto.ContentDto;
+import com.example.monster.contents.entity.Content;
+import com.example.monster.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Locale;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -35,7 +37,7 @@ public class ContentController {
     }
 
     @GetMapping
-    public ResponseEntity mainPage(Pageable pageable, PagedResourcesAssembler<Content> assembler, @CurrentUser Member member){
+    public ResponseEntity mainPage(Pageable pageable, PagedResourcesAssembler<Content> assembler, @CurrentUser Account account){
         Page<Content> page = this.contentService.getContentListAll(pageable);
         var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
@@ -46,7 +48,7 @@ public class ContentController {
     public ResponseEntity createContent(
             @RequestBody @Valid ContentDto contentDto, Errors errors,
             @PathVariable("category") String category,
-            @CurrentUser Member member) {
+            @CurrentUser Account account) {
         if (errors.hasErrors()) {
             return badRequest(errors);
         }

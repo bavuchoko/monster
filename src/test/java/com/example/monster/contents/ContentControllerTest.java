@@ -1,11 +1,11 @@
 package com.example.monster.contents;
 
+import com.example.monster.account.entity.Account;
+import com.example.monster.account.entity.AccountRole;
+import com.example.monster.account.service.AccountService;
 import com.example.monster.common.BaseControllerTest;
-import com.example.monster.common.authenticatior.AuthService;
-import com.example.monster.members.Member;
-import com.example.monster.members.MemberJapRepository;
-import com.example.monster.members.MemberRole;
-import com.example.monster.members.MemberService;
+import com.example.monster.contents.dto.ContentDto;
+import com.example.monster.contents.service.ContentService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
@@ -29,10 +29,9 @@ public class ContentControllerTest extends BaseControllerTest {
     ContentService contentService;
 
     @Autowired
-    MemberService memberService;
+    AccountService accountService;
 
-    @Autowired
-    AuthService authService;
+
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -71,14 +70,14 @@ public class ContentControllerTest extends BaseControllerTest {
         //Given
 
         HttpServletResponse response = mock(HttpServletResponse.class);
-        Member testUser = Member.builder()
+        Account testUser = Account.builder()
                 .username("test@email.com")
                 .password("test")
-                .roles(Set.of(MemberRole.USER))
+                .roles(Set.of(AccountRole.USER))
                 .build();
         String pa  = testUser.getPassword();
-        this.memberService.saveMember(testUser);
-        return this.authService.authirize(testUser.getUsername(), pa, response).getToken();
+        this.accountService.saveMember(testUser);
+        return this.accountService.authirize(testUser.getUsername(), pa, response).getToken();
 
     }
 }

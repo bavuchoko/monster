@@ -1,9 +1,8 @@
 package com.example.monster.common;
 
-import com.example.monster.common.AppProperties;
-import com.example.monster.members.Member;
-import com.example.monster.members.MemberRole;
-import com.example.monster.members.MemberService;
+import com.example.monster.account.entity.Account;
+import com.example.monster.account.entity.AccountRole;
+import com.example.monster.account.service.AccountService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -32,19 +31,19 @@ public class AppConfig {
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
             @Autowired
-            MemberService memberService;
+            AccountService accountService;
 
             @Autowired
             AppProperties appProperties;
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                Member admin = Member.builder()
+                Account admin = Account.builder()
                         .username(appProperties.getAdminUsername())
                         .password(appProperties.getAdminPassword())
-                        .roles(Set.of(MemberRole.ADMIN, MemberRole.USER))
+                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
-                memberService.saveMember(admin);
+                accountService.saveMember(admin);
 //                Member user = Member.builder()
 //                        .username(appProperties.getUserUsername())
 //                        .password(appProperties.getUserPassword())
