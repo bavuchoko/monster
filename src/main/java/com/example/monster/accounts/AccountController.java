@@ -50,6 +50,7 @@ public class AccountController {
         return ResponseEntity.ok().body(pageResources);
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/authenticate")
     public ResponseEntity authorize(@Valid @RequestBody AccountDto accountDto, Errors errors, HttpServletResponse response) {
 
