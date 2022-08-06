@@ -49,7 +49,7 @@ public class AccountController {
         pageResources.add(Link.of("/docs/index/html").withRel("profile"));
         return ResponseEntity.ok().body(pageResources);
     }
-    
+
     @PostMapping("/authenticate")
     public ResponseEntity authorize(@Valid @RequestBody AccountDto accountDto, Errors errors, HttpServletResponse response) {
 
