@@ -88,7 +88,7 @@ public class SecurityConfig {
         return httpSecurity
                     .httpBasic().disable()
 //                    .cors()
-                .and()
+//                .and()
                     .csrf().disable()
 
                     .exceptionHandling()
