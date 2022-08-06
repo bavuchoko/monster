@@ -10,6 +10,7 @@ import com.example.monster.config.security.jwt.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -22,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
@@ -68,19 +68,6 @@ public class SecurityConfig {
                 .antMatchers("/hello")
                 .antMatchers("/hello/**");
     }
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 
 
     //인증서버 설정시 시큐리시 설정에 SecurityFilterChain 이 있으면 둘중 하나 선택하라고 에러남
@@ -88,8 +75,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                     .httpBasic().disable()
-                    .cors().configurationSource(corsConfigurationSource())
-                .and()
                     .csrf().disable()
 
                     .exceptionHandling()
@@ -102,11 +87,10 @@ public class SecurityConfig {
 
                 .and()
                     .authorizeRequests()
-                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                    .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .antMatchers("/api/**").permitAll()
                     .antMatchers("/admin/*").hasRole("ADMIN")
                     .anyRequest().authenticated()
-
                 .and()
                     .apply(new JwtSecurityConfig(tokenManager))
 
