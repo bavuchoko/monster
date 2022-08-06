@@ -87,7 +87,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                     .httpBasic().disable()
-                    .cors().configurationSource(corsConfigurationSource())
+                    .cors()
                 .and()
                     .csrf().disable()
 
