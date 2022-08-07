@@ -79,27 +79,25 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic().disable()
                 .csrf().disable()
-                .cors().configurationSource(corsConfigurationSource())
-                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                .and()
+            .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                .and()
+            .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/admin/*").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                .and()
+            .and()
                 .apply(new JwtSecurityConfig(tokenManager))
 
-                .and().build();
+            .and().build();
 
     }
 
