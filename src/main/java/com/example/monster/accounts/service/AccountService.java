@@ -96,8 +96,10 @@ public class AccountService{
     }
 
     public void logout(HttpServletRequest req) {
+        if(null != cookieUtil.getCookie(req, TokenType.REFRESH_TOKEN.getValue())){
         String refreshTokenInCookie = cookieUtil.getCookie(req, TokenType.REFRESH_TOKEN.getValue()).getValue();
         redisUtil.deleteData(refreshTokenInCookie);
+        }
     }
 
 
