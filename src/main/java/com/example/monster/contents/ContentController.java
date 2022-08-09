@@ -37,14 +37,24 @@ public class ContentController {
         return ResponseEntity.badRequest().body(EntityModel.of(errors).add(linkTo(ContentController.class).slash("/").withRel("redirect")));
     }
 
-    @GetMapping
-    public ResponseEntity mainPage(Pageable pageable, PagedResourcesAssembler<Content> assembler, @CurrentUser Account account){
-        Page<Content> page = this.contentService.getContentListAll(pageable);
+    /**
+     * 카테고리별 리스트 페이지
+     * */
+    @GetMapping("{category}")
+    public ResponseEntity listPage(
+            Pageable pageable,
+            PagedResourcesAssembler<Content> assembler,
+            @PathVariable String category,
+            @CurrentUser Account account){
+        Page<Content> page = this.contentService.getContentListAll(Enum.valueOf(Category.class, category.toUpperCase()), pageable);
         var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
         return ResponseEntity.ok().body(pageResources);
     }
 
+    /**
+     * 카테고리별 등록 페이지
+     * */
     @PostMapping("{category}")
     @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity createContent(
@@ -66,6 +76,20 @@ public class ContentController {
         resources.add(selfLinkBuilder.withRel("update-contents"));
         resources.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
         return ResponseEntity.created(uri).body(resources);
+    }
+
+    /**
+     * 카테고리별 상세 페이지
+     */
+    @GetMapping("{category}/{id}")
+    public ResponseEntity viewContent(
+            @PathVariable String category,
+            @PathVariable String id,
+            @CurrentUser Account account) {
+
+
+
+        return null;
     }
 
 }

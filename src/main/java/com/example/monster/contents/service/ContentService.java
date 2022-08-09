@@ -1,5 +1,6 @@
 package com.example.monster.contents.service;
 
+import com.example.monster.contents.Category;
 import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.repository.ContentJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ public class ContentService {
     ContentJpaRepository contentJpaRepository;
 
 
-    public Page<Content> getContentListAll(Pageable pageable) {
-        return contentJpaRepository.findAll(pageable);
+    public Page<Content> getContentListAll(Category category, Pageable pageable) {
+        return contentJpaRepository.findContentByCategory(category, pageable);
     }
 
     public Content createContent(Content content) {
