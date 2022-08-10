@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -21,6 +22,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -38,7 +44,7 @@ public class ContentController {
     }
 
     /**
-     * 카테고리별 리스트 페이지
+     * 리스트 조회
      * */
     @GetMapping("{category}")
     public ResponseEntity listPage(
@@ -53,7 +59,57 @@ public class ContentController {
     }
 
     /**
-     * 카테고리별 등록 페이지
+     * 최근  조회
+     * * */
+    @GetMapping("/recent/{category}")
+    public ResponseEntity recentPage(
+            @PathVariable String category) {
+
+        Optional<List> recentContentList = this.contentService.getRecentContentList(Enum.valueOf(Category.class, category.toUpperCase()));
+        if (recentContentList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List list = (List)recentContentList.get().stream().map(recent -> {
+            EntityModel<Content> entity = EntityModel.of((Content) recent);
+            entity.add(linkTo(ContentController.class).slash(category).slash(((Content) recent).getId()).withSelfRel());
+            return entity;
+        }).collect(Collectors.toList());
+        CollectionModel resource = CollectionModel.of(list);
+        resource.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
+        return ResponseEntity.ok().body(resource);
+    }
+
+
+    /**
+     * 단건 조회
+     *
+     */
+    @GetMapping("{category}/{id}")
+    public ResponseEntity viewContent(
+            @PathVariable String category,
+            @PathVariable String id,
+            @CurrentUser Account account) {
+
+        Category type = Enum.valueOf(Category.class, category.toUpperCase());
+        Long contendId = Long.valueOf(id);
+
+        Optional<Content> singleContent = contentService.getSingleContent(type, contendId);
+        if(singleContent.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        Content loadedContent = singleContent.get();
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(loadedContent.getCategory().getName()).slash(loadedContent.getId());
+        EntityModel resource = EntityModel.of(loadedContent);
+        resource.add(selfLinkBuilder.withSelfRel());
+        resource.add(selfLinkBuilder.withRel("update"));
+        resource.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
+
+        return ResponseEntity.ok().body(resource);
+    }
+
+    /**
+     * 등록
      * */
     @PostMapping("{category}")
     @PreAuthorize("hasAnyRole('USER')")
@@ -68,29 +124,16 @@ public class ContentController {
         content.orCategory(Enum.valueOf(Category.class, category.toUpperCase()));
 //        content.orMemeber(member);
         Content savedContent = contentService.createContent(content);
-        WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(savedContent.getId());
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(savedContent.getCategory().getName()).slash(savedContent.getId());
         URI uri = selfLinkBuilder.toUri();
         EntityModel resources = EntityModel.of(savedContent);
-        resources.add(linkTo(ContentController.class).withRel("create-contents"));
         resources.add(selfLinkBuilder.withSelfRel());
-        resources.add(selfLinkBuilder.withRel("update-contents"));
-        resources.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
+        resources.add(linkTo(ContentController.class).slash(savedContent.getCategory().getName()).withRel("list"));
+        resources.add(Link.of("/docs/asciidoc/api.html#content-create").withRel("profile"));
         return ResponseEntity.created(uri).body(resources);
     }
 
-    /**
-     * 카테고리별 상세 페이지
-     */
-    @GetMapping("{category}/{id}")
-    public ResponseEntity viewContent(
-            @PathVariable String category,
-            @PathVariable String id,
-            @CurrentUser Account account) {
 
-
-
-        return null;
-    }
 
 }
 

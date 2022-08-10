@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ContentService {
 
@@ -21,5 +24,13 @@ public class ContentService {
 
     public Content createContent(Content content) {
         return contentJpaRepository.save(content);
+    }
+
+    public Optional<Content> getSingleContent(Category type, Long contendId) {
+        return contentJpaRepository.findContentByCategoryAndId(type,contendId);
+    }
+
+    public Optional<List> getRecentContentList(Category category) {
+        return contentJpaRepository.findTop3ByCategoryOrderByWriteTimeDesc(category);
     }
 }
