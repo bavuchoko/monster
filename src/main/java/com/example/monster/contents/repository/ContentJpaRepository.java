@@ -15,6 +15,8 @@ public interface ContentJpaRepository extends JpaRepository<Content, ContentId> 
     Optional<Content> findByCategory(String category);
     Page<Content> findContentByCategory(Category category, Pageable pageable);
     Optional<Content> findContentByCategoryAndId(Category category, Long id);
+    
+
     Optional<List> findTop3ByCategoryOrderByWriteTimeDesc(Category category);
 
 }

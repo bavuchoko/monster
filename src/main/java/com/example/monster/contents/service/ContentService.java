@@ -17,7 +17,7 @@ public class ContentService {
     @Autowired
     ContentJpaRepository contentJpaRepository;
 
-
+    //Todo 제목 100자 이상 ... 대체, 내용 150글자 이상 ... 대체
     public Page<Content> getContentListAll(Category category, Pageable pageable) {
         return contentJpaRepository.findContentByCategory(category, pageable);
     }
@@ -29,7 +29,7 @@ public class ContentService {
     public Optional<Content> getSingleContent(Category type, Long contendId) {
         return contentJpaRepository.findContentByCategoryAndId(type,contendId);
     }
-
+    //Todo 제목 22자 이상 ... 대체, 내용 150글자 이상 ... 대체
     public Optional<List> getRecentContentList(Category category) {
         return contentJpaRepository.findTop3ByCategoryOrderByWriteTimeDesc(category);
     }
