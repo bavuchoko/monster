@@ -3,8 +3,6 @@ package com.example.monster.contents.entity;
 
 import com.example.monster.accounts.entity.Account;
 import com.example.monster.common.serializers.AccountSerializer;
-import com.example.monster.contents.Category;
-import com.example.monster.contents.ContentId;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,15 +27,13 @@ public class Content {
     private long id;
 
     @Id
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    private String category;
 
     private String title;
     private String body;
     private LocalDateTime writeTime;
     private LocalDateTime updateTime;
     private int hitCout;
-
     @ManyToOne(fetch =FetchType.LAZY)
     @JoinColumn(name="member_id")
     @JsonSerialize(using = AccountSerializer.class)
@@ -46,15 +42,16 @@ public class Content {
     public void orMemeber(Account account) {
         this.account = account;
     }
-    public void orCategory(Category category) {
-        this.category =category;
-    }
 
-    @OneToMany(cascade=CascadeType.PERSIST)
+    public void categorySetter(String category) {
+        this.category=category;
+    }
+    @OneToMany(cascade=CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumns(value = {
         @JoinColumn(name = "content_id", updatable = false, insertable = false),
         @JoinColumn(name = "category", updatable = false, insertable = false)
     })
     private List<Replies> replies = new ArrayList<>();
 
+    private boolean isVisible = true;
 }

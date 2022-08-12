@@ -1,4 +1,4 @@
-package com.example.monster.contents;
+package com.example.monster.contents.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -14,6 +14,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ContentId implements Serializable {
     private long id;
-    private Category category;
+    private String category;
 
 }

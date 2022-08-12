@@ -1,6 +1,5 @@
 package com.example.monster.contents.dto;
 
-import com.example.monster.contents.Category;
 import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.entity.Replies;
 import lombok.*;
@@ -22,7 +21,7 @@ public class ContentDto {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    private Category category;
+    private String category;
     @NotEmpty
     private String title;
     @NotEmpty
@@ -36,7 +35,7 @@ public class ContentDto {
 
     private List<Replies> replies;
 
-    public Content of() {
+    public Content toEntity() {
         modelMapper.getConfiguration()
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
                 .setFieldMatchingEnabled(true);

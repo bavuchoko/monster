@@ -15,6 +15,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
@@ -23,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,9 @@ public class ContentController {
             PagedResourcesAssembler<Content> assembler,
             @PathVariable String category,
             @CurrentUser Account account){
-        Page<Content> page = this.contentService.getContentListAll(Enum.valueOf(Category.class, category.toUpperCase()), pageable);
+
+
+        Page<Content> page = this.contentService.getContentListAll(category, pageable);
         var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
         return ResponseEntity.ok().body(pageResources);
@@ -65,7 +66,7 @@ public class ContentController {
     public ResponseEntity recentPage(
             @PathVariable String category) {
 
-        Optional<List> recentContentList = this.contentService.getRecentContentList(Enum.valueOf(Category.class, category.toUpperCase()));
+        Optional<List> recentContentList = this.contentService.getRecentContentList(category);
         if (recentContentList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -91,15 +92,14 @@ public class ContentController {
             @PathVariable String id,
             @CurrentUser Account account) {
 
-        Category type = Enum.valueOf(Category.class, category.toUpperCase());
         Long contendId = Long.valueOf(id);
 
-        Optional<Content> singleContent = contentService.getSingleContent(type, contendId);
+        Optional<Content> singleContent = contentService.getSingleContent(category, contendId);
         if(singleContent.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         Content loadedContent = singleContent.get();
-        WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(loadedContent.getCategory().getName()).slash(loadedContent.getId());
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(loadedContent.getCategory()).slash(loadedContent.getId());
         EntityModel resource = EntityModel.of(loadedContent);
         resource.add(selfLinkBuilder.withSelfRel());
         resource.add(selfLinkBuilder.withRel("update"));
@@ -120,19 +120,86 @@ public class ContentController {
         if (errors.hasErrors()) {
             return badRequest(errors);
         }
-        Content content = contentDto.of();
-        content.orCategory(Enum.valueOf(Category.class, category.toUpperCase()));
+        Content content = contentDto.toEntity();
+        content.categorySetter(category);
 //        content.orMemeber(member);
         Content savedContent = contentService.createContent(content);
-        WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(savedContent.getCategory().getName()).slash(savedContent.getId());
+        
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(savedContent.getCategory()).slash(savedContent.getId());
         URI uri = selfLinkBuilder.toUri();
+        
         EntityModel resources = EntityModel.of(savedContent);
+        
         resources.add(selfLinkBuilder.withSelfRel());
-        resources.add(linkTo(ContentController.class).slash(savedContent.getCategory().getName()).withRel("list"));
-        resources.add(Link.of("/docs/asciidoc/api.html#content-create").withRel("profile"));
+        resources.add(linkTo(ContentController.class).slash(savedContent.getCategory()).withRel("list"));
+        resources.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
+        
         return ResponseEntity.created(uri).body(resources);
     }
 
+    /**
+     * 수정
+     * @param contentDto
+     * @param errors
+     * @param category
+     * @param id
+     * @param account
+     * @return
+     */
+
+    @PutMapping("{category}/{id}")
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity updateContent(
+            @RequestBody @Valid ContentDto contentDto, Errors errors,
+            @PathVariable String category,
+            @PathVariable String id,
+            @CurrentUser Account account) {
+        Long contentId = Long.valueOf(id);
+        Optional<Content> loadedConetnt = contentService.getSingleContent(category,contentId);
+
+        if(loadedConetnt.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+        Content contentEntity = loadedConetnt.get();
+
+        if (!contentEntity.getAccount().equals(account)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+
+        Content contentForUpdate = contentService.createContent(contentDto.toEntity());
+        EntityModel resource = EntityModel.of(contentForUpdate);
+        resource.add(Link.of("/docs/index.html#resources-content-update").withRel("profile"));
+        return ResponseEntity.ok(resource);
+    }
+
+
+    @DeleteMapping("{category}/{id}")
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity<Object> deleteContent(
+            @PathVariable String category,
+            @PathVariable String id,
+            @CurrentUser Account account) {
+
+        Long contentId = Long.valueOf(id);
+        Optional<Content> loadedConetnt = contentService.getSingleContent(category, contentId);
+
+        if(loadedConetnt.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Content deleteContent = loadedConetnt.get();
+
+        if (!deleteContent.getAccount().equals(account)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        contentService.deleteContent(deleteContent);
+        EntityModel resource = EntityModel.of(deleteContent);
+        return ResponseEntity.ok(resource);
+    }
 
 
 }
