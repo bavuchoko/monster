@@ -167,7 +167,7 @@ public class ContentController {
         Content contentEntity = loadedConetnt.get();
 
         if (!contentEntity.getAccount().equals(account)) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("aa");
         }
 
         Content contentForUpdate = contentService.createContent(contentDto.toEntity());
@@ -194,7 +194,7 @@ public class ContentController {
         Content deleteContent = loadedConetnt.get();
 
         if (!deleteContent.getAccount().equals(account)) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("aa");
         }
         contentService.deleteContent(deleteContent);
         EntityModel resource = EntityModel.of(deleteContent);
