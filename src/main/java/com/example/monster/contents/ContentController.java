@@ -5,9 +5,11 @@ import com.example.monster.accounts.CurrentUser;
 import com.example.monster.accounts.entity.Account;
 import com.example.monster.contents.dto.ContentDto;
 import com.example.monster.contents.entity.Content;
+import com.example.monster.contents.entity.ContentImage;
 import com.example.monster.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -18,10 +20,14 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +40,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequiredArgsConstructor
 public class ContentController {
 
+    @Value("${uploadImageFolder}")
+    private String storePath;
 
     private final ContentService contentService;
     private final ModelMapper modelMapper;
@@ -179,7 +187,7 @@ public class ContentController {
 
     @DeleteMapping("{category}/{id}")
     @PreAuthorize("hasAnyRole('USER')")
-    public ResponseEntity<Object> deleteContent(
+    public ResponseEntity deleteContent(
             @PathVariable String category,
             @PathVariable String id,
             @CurrentUser Account account) {
@@ -201,6 +209,22 @@ public class ContentController {
         return ResponseEntity.ok(resource);
     }
 
+
+    @PostMapping("image")
+//    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity imageUpload(@RequestParam("file") MultipartFile file) throws IOException {
+//        if(file.isEmpty()){
+//            //todo 파일 안왔을때
+//        }
+        System.out.println("aaa");
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        file.transferTo(new File(storePath + file.getOriginalFilename()));
+
+
+        contentService.uploadImage(file);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 }
 

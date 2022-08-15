@@ -3,6 +3,7 @@ package com.example.monster.contents.entity;
 
 import com.example.monster.accounts.entity.Account;
 import com.example.monster.common.serializers.AccountSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,10 @@ public class Content {
 
     private String title;
     private String body;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime writeTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
     private int hitCout;
     @ManyToOne(fetch =FetchType.LAZY)
@@ -54,4 +58,8 @@ public class Content {
     private List<Replies> replies = new ArrayList<>();
 
     private boolean isVisible = true;
+
+//    @Transient
+//    private String thumbnail;
+
 }

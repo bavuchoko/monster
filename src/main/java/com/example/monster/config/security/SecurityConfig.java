@@ -68,6 +68,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                 .antMatchers("/docs/**")
+                .antMatchers("/images/**")
                 .antMatchers("/hello")
                 .antMatchers("/hello/**");
     }

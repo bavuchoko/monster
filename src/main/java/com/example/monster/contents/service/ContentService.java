@@ -3,10 +3,12 @@ package com.example.monster.contents.service;
 import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.repository.ContentJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,9 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ContentService {
+
+    @Value("tempUploadImageFolder")
+    private String temPath;
 
     @Autowired
     ContentJpaRepository contentJpaRepository;
@@ -32,11 +37,16 @@ public class ContentService {
     }
     //Todo 제목 22자 이상 ... 대체, 내용 150글자 이상 ... 대체
     public Optional<List> getRecentContentList(String category) {
-        return contentJpaRepository.findTop3ByCategoryOrderByWriteTimeDesc(category);
+        return contentJpaRepository.findTop4ByCategoryOrderByWriteTimeDesc(category);
     }
 
     public void deleteContent(Content deleteContent) {
 
         contentJpaRepository.delete(deleteContent);
+    }
+
+    public void uploadImage(MultipartFile file) {
+
+
     }
 }

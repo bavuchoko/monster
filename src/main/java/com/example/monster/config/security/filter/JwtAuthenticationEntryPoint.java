@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -28,9 +30,13 @@ public class JwtAuthenticationEntryPoint  implements AuthenticationEntryPoint {
             // 유효한 자격증명을 제공하지 않고 접근하려 할때 401
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            Map<String,Object> errMsg = new HashMap<>();
+            errMsg.put("status",401);
+            errMsg.put("code",HttpStatus.UNAUTHORIZED);
+            errMsg.put("message","유효한 자격증명이 필요합니다.");
             try (OutputStream os = response.getOutputStream()) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.writeValue(os, "sefawdawdsef");
+                objectMapper.writeValue(os, errMsg);
                 os.flush();
             }
 
