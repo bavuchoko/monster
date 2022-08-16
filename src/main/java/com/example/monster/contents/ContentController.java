@@ -185,7 +185,13 @@ public class ContentController {
         return ResponseEntity.ok(resource);
     }
 
-
+    /**
+     * 삭제
+     * @param category
+     * @param id
+     * @param account
+     * @return
+     */
     @DeleteMapping("{category}/{id}")
     @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity deleteContent(
@@ -211,11 +217,17 @@ public class ContentController {
     }
 
 
+    /**
+     * 이미지 업로드
+     * @param file
+     * @return res.data 업로드된 이미지 파일 주소
+     * @throws IOException
+     */
     @PostMapping("image")
 //    @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity imageUpload(@RequestParam("file") MultipartFile file) throws IOException {
         if(file.isEmpty()){
-//            //todo 파일 안왔을때
+            return ResponseEntity.notFound().build();
         }
 
         String savedFileName = contentService.uploadImage(file);
