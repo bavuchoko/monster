@@ -95,6 +95,11 @@ public class AccountController {
         accountService.logout(req);
     }
 
+    @GetMapping("/validation")
+    public String valdationTimeCheck(@CurrentUser Account account) {
+        System.out.println(account.getNickname());
+        return  "aa";
+    }
 
 
 
@@ -119,4 +124,6 @@ public class AccountController {
     private ResponseEntity<EntityModel<Errors>> badRequest(Errors errors) {
         return ResponseEntity.badRequest().body(EntityModel.of(errors).add(linkTo(AccountController.class).slash("/join").withRel("redirect")));
     }
+
+
 }

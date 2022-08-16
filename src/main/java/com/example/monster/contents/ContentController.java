@@ -224,7 +224,7 @@ public class ContentController {
      * @throws IOException
      */
     @PostMapping("image")
-//    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity imageUpload(@RequestParam("file") MultipartFile file) throws IOException {
         if(file.isEmpty()){
             return ResponseEntity.notFound().build();
