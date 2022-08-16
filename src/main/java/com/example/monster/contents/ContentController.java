@@ -60,7 +60,6 @@ public class ContentController {
             @PathVariable String category,
             @CurrentUser Account account){
 
-
         Page<Content> page = this.contentService.getContentListAll(category, pageable);
         var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
