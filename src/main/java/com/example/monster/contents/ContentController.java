@@ -40,8 +40,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequiredArgsConstructor
 public class ContentController {
 
-    @Value("${uploadImageFolder}")
-    private String storePath;
+    @Value("${urlPath}")
+    private String urlPath;
+
+
 
     private final ContentService contentService;
     private final ModelMapper modelMapper;
@@ -212,17 +214,14 @@ public class ContentController {
     @PostMapping("image")
 //    @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity imageUpload(@RequestParam("file") MultipartFile file) throws IOException {
-//        if(file.isEmpty()){
+        if(file.isEmpty()){
 //            //todo 파일 안왔을때
-//        }
-        System.out.println("aaa");
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        }
 
-        file.transferTo(new File(storePath + file.getOriginalFilename()));
+        String savedFileName = contentService.uploadImage(file);
+        String imagePath = urlPath +savedFileName;
 
-
-        contentService.uploadImage(file);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body(imagePath);
     }
 
 }

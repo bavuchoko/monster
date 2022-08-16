@@ -8,17 +8,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
 public class ContentService {
 
-    @Value("tempUploadImageFolder")
-    private String temPath;
+    @Value("${imageResourcesPath}")
+    private String resourcesPath;
+
+    @Value("${savePath}")
+    private String savePath;
 
     @Autowired
     ContentJpaRepository contentJpaRepository;
@@ -45,8 +52,16 @@ public class ContentService {
         contentJpaRepository.delete(deleteContent);
     }
 
-    public void uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file) throws IOException {
 
+        String uuid = UUID.randomUUID().toString();
+        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
 
+        String savedFileName= uuid + "_" + originalFileName;
+        file.transferTo(Paths.get(savePath + savedFileName));
+
+        return savedFileName;
     }
+
+
 }

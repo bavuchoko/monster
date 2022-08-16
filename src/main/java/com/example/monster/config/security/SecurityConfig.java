@@ -1,6 +1,5 @@
 package com.example.monster.config.security;
 
-import com.example.monster.accounts.service.AccountService;
 import com.example.monster.accounts.service.CustomUserDetailsServiceImpl;
 import com.example.monster.config.AppProperties;
 import com.example.monster.config.security.filter.JwtAccessDeniedHandler;
@@ -8,7 +7,6 @@ import com.example.monster.config.security.filter.JwtAuthenticationEntryPoint;
 import com.example.monster.config.security.jwt.JwtSecurityConfig;
 import com.example.monster.config.security.jwt.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,8 +23,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 
 @EnableWebSecurity
@@ -66,11 +62,13 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .antMatchers("/docs/**")
-                .antMatchers("/images/**")
-                .antMatchers("/hello")
-                .antMatchers("/hello/**");
+        return (web) -> web.ignoring()
+                .antMatchers(
+                        "/favicon.ico",
+                        "/docs/**",
+                        "/hello/**",
+                        "/imagePath/**"
+                );
     }
 
 
