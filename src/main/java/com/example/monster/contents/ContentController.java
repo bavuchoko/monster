@@ -56,6 +56,7 @@ public class ContentController {
      * 리스트 조회
      * */
     @GetMapping("{category}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity listPage(
             Pageable pageable,
             PagedResourcesAssembler<Content> assembler,
@@ -72,6 +73,7 @@ public class ContentController {
      * 최근  조회
      * * */
     @GetMapping("/recent/{category}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity recentPage(
             @PathVariable String category) {
 
@@ -96,6 +98,7 @@ public class ContentController {
      *
      */
     @GetMapping("{category}/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity viewContent(
             @PathVariable String category,
             @PathVariable String id,
