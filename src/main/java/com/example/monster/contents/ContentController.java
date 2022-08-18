@@ -239,5 +239,11 @@ public class ContentController {
         return ResponseEntity.ok().body(imagePath);
     }
 
+    @GetMapping("sagong")
+    @PreAuthorize("hasAnyRole('USER')")
+    public void sagong(@CurrentUser Account account) {
+        Account aa = account;
+    }
+
 }
 

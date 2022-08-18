@@ -41,20 +41,12 @@ public class JwtAuthenticationEntryPoint  implements AuthenticationEntryPoint {
             }
 
 
-//        response.sendRedirect("/api/user/refreshtoken");
+
 
     }
 
 
-//    @ExceptionHandler(value = { AccessDeniedException.class })
-//    public void commence(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex ) throws IOException {
-//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//        response.getOutputStream().println("{ \"error\": \"" + ex.getMessage() + "\" }");
-//
-//        response.getOutputStream().flush();
-//        response.getOutputStream().close();
-//    }
+
 
 
 }
