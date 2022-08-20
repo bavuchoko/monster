@@ -37,7 +37,7 @@ public class JwtFilter  extends OncePerRequestFilter {
         String jwt = resolveToken(request); // Request에서 토큰을 받음
         String requestURI = request.getRequestURI();
         try {
-            if (StringUtils.hasText(jwt) && tokenManager.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && tokenManager.validateToken(jwt, request)) {
                 Authentication authentication = tokenManager.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication); // resolveToke을 통해 토큰을 받아와서 유효성 검증을 하고 정상 토큰이면 SecurityContext에 저장
                 logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
@@ -45,7 +45,7 @@ public class JwtFilter  extends OncePerRequestFilter {
                 logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
             }
         }catch (ExpiredJwtException e){
-            throw e;
+            request.setAttribute("error", e);
         }
         filterChain.doFilter(request, response); // 다음 Filter를 실행하기 위한 코드. 마지막 필터라면 필터 실행 후 리소스를 반환한다.
     }

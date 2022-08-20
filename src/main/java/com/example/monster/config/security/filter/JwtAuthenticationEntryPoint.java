@@ -28,6 +28,7 @@ public class JwtAuthenticationEntryPoint  implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException {
 
             // 유효한 자격증명을 제공하지 않고 접근하려 할때 401
+            request.getAttribute("error");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             Map<String,Object> errMsg = new HashMap<>();

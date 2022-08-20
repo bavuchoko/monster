@@ -6,6 +6,8 @@ import com.example.monster.accounts.service.AccountService;
 import com.example.monster.config.security.CustomResponseBody;
 import com.example.monster.config.security.filter.JwtFilter;
 import com.example.monster.config.security.jwt.CookieUtil;
+import com.example.monster.config.security.jwt.TokenManager;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +37,7 @@ public class AccountController {
 
     private final AccountService accountService;
 
+    private final TokenManager tokenManager;
 
 
     @Autowired
@@ -83,25 +86,15 @@ public class AccountController {
      * 새 토큰을 발급해버리는 경우가 생긴다.
      * 결국 엑세스 토큰 자체가 없는 경우(예외)와 토큰이 만료된 경우(적절)의 로직을 분리해야 할 것 같다.
      * jwtAuthenticationEntryPoint 에서 401 처리를 할때 토큰이 없는경우를 구별해줘야 할 듯
-     *
-     * 컨트롤러 메서드를 정상적인 요청을 처리한 경우가 예외이고 예외가 발생한 것이 정상처리 인것마냥 ㅄ 같이 만들었다. 정리해야겠다.
      */
 
     @GetMapping("/refreshtoken")
-    public ResponseEntity refreshToken(HttpServletRequest request) {
-        if(accountService.refreshToken(request).isPresent()){
-            CustomResponseBody refreshedAccessToken =accountService.refreshToken(request).get();
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + refreshedAccessToken.getToken());
-            return new ResponseEntity(refreshedAccessToken, httpHeaders, HttpStatus.OK);
-        }
-        CustomResponseBody failToken = CustomResponseBody.builder()
-                .success("fail")
-                .token(null)
-                .username(null)
-                .message("토큰이 만료되었습니다.")
-                .build();
-        return ResponseEntity.badRequest().body(EntityModel.of(failToken));
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity refreshToken(HttpServletRequest request, @CurrentUser Account account) {
+        CustomResponseBody refreshedAccessToken = accountService.refreshToken(request).get();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + refreshedAccessToken.getToken());
+        return new ResponseEntity(refreshedAccessToken, httpHeaders, HttpStatus.OK);
     }
 
     @GetMapping("/logout")

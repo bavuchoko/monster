@@ -162,7 +162,7 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
 
 
     @Override
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, HttpServletRequest request) {
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -192,7 +192,7 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
                 .build()
                 .parseClaimsJws(refreshTokenInCookie)
                 .getBody();
-        if (validateToken(refreshTokenInCookie)){
+        if (validateToken(refreshTokenInCookie, request)){
             if(new Date().before(claims.get("exp",Date.class))){
                 return true;
             }

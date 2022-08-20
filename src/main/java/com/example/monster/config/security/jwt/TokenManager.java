@@ -8,7 +8,7 @@ public interface TokenManager {
 
     String createToken(Authentication authentication, TokenType tokenType);
     String refreshAccessToken(HttpServletRequest request);
-    boolean validateToken(String token);
+    boolean validateToken(String token, HttpServletRequest request);
     boolean validateRefreshToken(HttpServletRequest request);
     void destroyTokens(HttpServletRequest request);
     Authentication getAuthentication(String token);
