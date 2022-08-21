@@ -185,17 +185,19 @@ public class TokenManagerImpl implements TokenManager, InitializingBean {
 
     @Override
     public boolean validateRefreshToken(HttpServletRequest request) {
+        //쿠키에서 refreshToken을 꺼냄
         String refreshTokenInCookie = cookieUtil.getCookie(request, TokenType.REFRESH_TOKEN.getValue()).getValue();
+        //토큰을 파싱함
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(refreshTokenInCookie)
                 .getBody();
+
+        //갱신토큰에 이상이 없으면 통과
         if (validateToken(refreshTokenInCookie, request)){
-            if(new Date().before(claims.get("exp",Date.class))){
-                return true;
-            }
+            return true;
         }
         return false;
     }

@@ -87,7 +87,9 @@ public class AccountService{
 
     public Optional<CustomResponseBody> refreshToken(HttpServletRequest request) {
         CustomResponseBody customResponseBody= null;
+        //쿠키에서 refresh토큰을 꺼내 검증함
         if(tokenManager.validateRefreshToken(request)){
+
             String accessToken = tokenManager.refreshAccessToken(request);
             customResponseBody = CustomResponseBody.builder()
                     .success("true")

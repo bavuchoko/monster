@@ -89,8 +89,7 @@ public class AccountController {
      */
 
     @GetMapping("/refreshtoken")
-    @PreAuthorize("hasAnyRole('USER')")
-    public ResponseEntity refreshToken(HttpServletRequest request, @CurrentUser Account account) {
+    public ResponseEntity refreshToken(HttpServletRequest request) {
         CustomResponseBody refreshedAccessToken = accountService.refreshToken(request).get();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + refreshedAccessToken.getToken());
