@@ -1,7 +1,6 @@
 package com.example.monster.accounts.service;
 
 
-import com.example.monster.accounts.AccountAdapter;
 import com.example.monster.accounts.entity.Account;
 import com.example.monster.accounts.repository.AccountJapRepository;
 import com.example.monster.config.redis.RedisUtil;
@@ -11,6 +10,7 @@ import com.example.monster.config.security.jwt.TokenManager;
 import com.example.monster.config.security.jwt.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,9 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +35,9 @@ public class AccountService{
     AccountJapRepository accountJapRepository;
     @Autowired
     CookieUtil cookieUtil;
+
+    @Value("${spring.jwt.token-validity-in-seconds}")
+    private long accessTokenValidityTime;
 
     private final TokenManager tokenManager;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -74,7 +74,12 @@ public class AccountService{
                 .build();
         String refreshToken = tokenManager.createToken(authentication, TokenType.REFRESH_TOKEN);
         redisUtil.setData(refreshToken, authentication.getName());
+
         Cookie refreshTokenCookie = cookieUtil.createCookie("refreshToken", refreshToken);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setHttpOnly(true);
+        // expires in 7 days
+        refreshTokenCookie.setMaxAge((int)(accessTokenValidityTime/1000));
         response.addCookie(refreshTokenCookie);
 
         return customResponseBody;
@@ -101,9 +106,6 @@ public class AccountService{
         redisUtil.deleteData(refreshTokenInCookie);
         }
     }
-
-
-
 
     public Page<Account> loadUserList(Pageable pagable){
         return this.accountJapRepository.findAll(pagable);
