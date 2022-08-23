@@ -26,7 +26,6 @@ public class ContentDto {
     private String title;
     @NotEmpty
     private String body;
-    @NotNull
     private LocalDateTime writeTime;
 
 
