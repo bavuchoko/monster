@@ -134,7 +134,7 @@ public class ContentController {
         }
         Content content = contentDto.toEntity();
         content.categorySetter(category);
-//        content.orMemeber(member);
+        content.orMemeber(account);
         Content savedContent = contentService.createContent(content);
         
         WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(savedContent.getCategory()).slash(savedContent.getId());

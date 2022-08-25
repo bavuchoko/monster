@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
@@ -55,9 +56,18 @@ public class ContentService {
     public String uploadImage(MultipartFile file) throws IOException {
 
         String uuid = UUID.randomUUID().toString();
-        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
 
+        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+        File folder = new File(savePath);
+        if(!folder.exists()){
+            try {
+                folder.mkdir();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         String savedFileName= uuid + "_" + originalFileName;
+
         file.transferTo(Paths.get(savePath + savedFileName));
 
         return savedFileName;
