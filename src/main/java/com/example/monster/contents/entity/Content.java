@@ -31,6 +31,7 @@ public class Content {
     private String category;
 
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String body;
     private String bodyPreView;
 
