@@ -526,13 +526,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="resources-content-create">이벤트 생성</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="resources-content-create">이벤트 생성</h3>
 <div class="paragraph">
 <p><code>POST</code> 요청을 사용해서 새 이벤트를 만들 수 있다.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="resources-content-create_curl_request">Curl request</h3>
@@ -540,7 +538,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/api/content/java' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXJAbWFpbC5jb20iLCJpYXQiOjE2NjE3NTU5NTUsImV4cCI6MTY2MTg0MjM1NX0.RHCsMkgCQBHk7W4TKxlB1owASwplL5Yoo8M7JFATfG-HMNI7XmPoF1A6Y8Pf8AojSpYEAL0vl4LzKjXLnTk1Cw' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXJAbWFpbC5jb20iLCJpYXQiOjE2NjE3NjA1NzAsImV4cCI6MTY2MTg0Njk3MH0.q_RlgI-cpaKSK2nC4nrMNSuGW7UBrL7k9UiY6lJq4Ye54p6tIex5RXLm54sOBjyiNv0RZE3cZgZ_wDj_VAGAMg' \
     -H 'Accept: application/hal+json' \
     -d '{
   "category" : "java",
@@ -561,7 +559,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/content/java HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXJAbWFpbC5jb20iLCJpYXQiOjE2NjE3NTU5NTUsImV4cCI6MTY2MTg0MjM1NX0.RHCsMkgCQBHk7W4TKxlB1owASwplL5Yoo8M7JFATfG-HMNI7XmPoF1A6Y8Pf8AojSpYEAL0vl4LzKjXLnTk1Cw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXJAbWFpbC5jb20iLCJpYXQiOjE2NjE3NjA1NzAsImV4cCI6MTY2MTg0Njk3MH0.q_RlgI-cpaKSK2nC4nrMNSuGW7UBrL7k9UiY6lJq4Ye54p6tIex5RXLm54sOBjyiNv0RZE3cZgZ_wDj_VAGAMg
 Accept: application/hal+json
 Content-Length: 204
 Host: localhost:8080
@@ -664,11 +662,10 @@ Host: localhost:8080
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_response">RESPONSE</h3>
+
 </div>
-</div>
-<div class="sect1">
-<h2 id="_response">RESPONSE</h2>
-<div class="sectionbody">
 <div class="sect2">
 <h3 id="example_reponse_body">HTTP response</h3>
 <div class="listingblock">
@@ -823,7 +820,7 @@ Content-Length: 717
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-29 15:52:24 +0900
+Last updated 2022-08-29 15:56:10 +0900
 </div>
 </div>
 </body>

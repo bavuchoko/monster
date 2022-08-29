@@ -8,28 +8,25 @@ import com.example.monster.config.AppProperties;
 import com.example.monster.config.security.jwt.TokenManagerImpl;
 import com.example.monster.contents.dto.ContentDto;
 import com.example.monster.contents.entity.Content;
+import com.example.monster.contents.repository.ContentJpaRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,8 +40,31 @@ public class ContentControllerTest extends BaseControllerTest {
     AppProperties appProperties;
     @Autowired
     TokenManagerImpl tokenManager;
+    @Autowired
+    ContentJpaRepository contentJpaRepository;
 
 
+    @Test
+    public void quertTest()throws Exception{
+
+        //Given
+        IntStream.range(0, 30).forEach(i -> {
+            this.generateContent(i);
+        });
+
+
+        mockMvc.perform(get("/api/content/{category}","JAVA")
+                .param("page", "1")          //페이지 0 부터 시작 -> 1은 두번째 페이지
+                .param("size", "8")
+                .param("sort", "writeTime,DESC")
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("page").exists())
+                .andExpect(jsonPath("_embedded.contentList[0]._links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+                .andDo(document("query-content"));
+    }
 
 
 
@@ -128,6 +148,21 @@ public class ContentControllerTest extends BaseControllerTest {
         String Token = this.accountService.authirize(testUser.getUsername(), password, response).getToken();
         return Token;
 
+    }
+
+
+    private Content generateContent(int i) {
+
+
+        Content content = Content.builder()
+                .title("title" + i)
+                .body("test content")
+                .bodyPreView("body preview")
+                .isVisible(true)
+                .writeTime(LocalDateTime.of(2022, 6, 17, 14, 21))
+                .category("JAVA")
+                .build();
+        return this.contentJpaRepository.save(content);
     }
 
 }

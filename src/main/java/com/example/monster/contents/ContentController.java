@@ -16,6 +16,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping("/api/content")
+@RequestMapping(value = "/api/content" , produces = MediaTypes.HAL_JSON_VALUE)
 @RequiredArgsConstructor
 public class ContentController {
 
@@ -185,7 +186,7 @@ public class ContentController {
 
         Content contentForUpdate = contentService.createContent(contentDto.toEntity());
         EntityModel resource = EntityModel.of(contentForUpdate);
-        resource.add(Link.of("/docs/index.html#resources-content-update").withRel("profile"));
+        resource.add(Link.of("/docs/api.html#resources-content-update").withRel("profile"));
         return ResponseEntity.ok(resource);
     }
 
