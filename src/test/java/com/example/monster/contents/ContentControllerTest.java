@@ -11,6 +11,7 @@ import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.repository.ContentJpaRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -45,6 +46,7 @@ public class ContentControllerTest extends BaseControllerTest {
 
 
     @Test
+    @Description("리스트 조회 테스트")
     public void quertTest()throws Exception{
 
         //Given
@@ -69,6 +71,7 @@ public class ContentControllerTest extends BaseControllerTest {
 
 
     @Test
+    @Description("새 게시글 등록 테스트")
     public void createTest() throws Exception {
         ContentDto content = ContentDto.builder()
                 .title("제목")
@@ -121,11 +124,24 @@ public class ContentControllerTest extends BaseControllerTest {
                                         fieldWithPath("_links.update-content.href").description("자신 수정 링크"),
                                         fieldWithPath("_links.profile.href").description("프로필")
                                 )
-
                         ));
-
-
     }
+    
+    
+    //Todo 유저정보 없이 등록 테스트 401
+    //Todo 게시글 필수내용 없이 등록테스트 400
+    //Todo 상세조회 테스트 200
+
+    //Todo 적법한 수정 테스트 200
+    //Todo 유저정보없이 수정 테스트 401
+    //Todo 다른유저 수정 테스트 401
+
+    //Todo 적법한 삭제 테스트 200
+    //Todo 유저정보없이 삭제 테스트 401
+    //Todo 다른유저 삭제 테스트 401
+    
+    
+    
     private String getBaererToken() throws Exception {
         return "Bearer " + getAccescToken();
     }

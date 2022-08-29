@@ -49,7 +49,6 @@ public class ContentService {
     }
 
     public void deleteContent(Content deleteContent) {
-
         contentJpaRepository.delete(deleteContent);
     }
 
