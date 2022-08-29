@@ -3,18 +3,99 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-== REQUEST
 
-include::{snippets}/reviews/create/http-request.adoc[]
 
-== RESPONSE
+[[overview]]
+= 개요
 
-include::{snippets}/reviews/create/http-response.adoc[]
+[[overview-http-verbs]]
+== HTTP 동사
 
-== REQUEST
+본 REST API에서 사용하는 HTTP 동사(verbs)는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
 
-include::{snippets}/reviews/student-search/http-request.adoc[]
+|===
+| 동사 | 용례
 
-== RESPONSE
+| `GET`
+| 리소스를 가져올 때 사용
 
-include::{snippets}/reviews/student-search/http-response.adoc[]
+| `POST`
+| 새 리소스를 만들 때 사용
+
+| `PUT`
+| 기존 리소스를 수정할 때 사용
+
+| `PATCH`
+| 기존 리소스의 일부를 수정할 때 사용
+
+| `DELETE`
+| 기존 리소스를 삭제할 떄 사용
+|===
+
+[[overview-http-status-codes]]
+== HTTP 상태 코드
+
+본 REST API에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 상태 코드 | 용례
+
+| `200 OK`
+| 요청을 성공적으로 처리함
+
+| `201 Created`
+| 새 리소스를 성공적으로 생성함. 응답의 `Location` 헤더에 해당 리소스의 URI가 담겨있다.
+
+| `204 No Content`
+| 기존 리소스를 성공적으로 수정함.
+
+| `400 Bad Request`
+| 잘못된 요청을 보낸 경우. 응답 본문에 더 오류에 대한 정보가 담겨있다.
+
+| `404 Not Found`
+| 요청한 리소스가 없음.
+|===
+
+[[resources-content-create]]
+=== 이벤트 생성
+
+`POST` 요청을 사용해서 새 이벤트를 만들 수 있다.
+
+
+[[resources-content-create_curl_request]]
+=== Curl request
+include::{snippets}/create-content/curl-request.adoc[]
+
+[[resources-content-create_http_request]]
+=== HTTP request
+include::{snippets}/create-content/http-request.adoc[]
+
+
+[[resources-content-create_request-header]]
+==== Request header
+include::{snippets}/create-content/request-headers.adoc[]
+
+[[resources-content-create_request-fields]]
+==== Request fileds
+include::{snippets}/create-content/request-fields.adoc[]
+
+
+[[example_request_body]]
+=== request body
+include::{snippets}/create-content/request-body.adoc[]
+
+
+=== RESPONSE
+
+[[example_reponse_body]]
+=== HTTP response
+include::{snippets}/create-content/http-response.adoc[]
+
+
+[[resources-content_reponse_header]]
+=== HTTP response
+include::{snippets}/create-content/response-headers.adoc[]
+
+[[resources-content_reponse_fields]]
+=== HTTP fields
+include::{snippets}/create-content/response-fields.adoc[]

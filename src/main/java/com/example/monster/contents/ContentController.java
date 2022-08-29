@@ -142,8 +142,9 @@ public class ContentController {
         
         EntityModel resources = EntityModel.of(savedContent);
         
+        resources.add(linkTo(ContentController.class).slash(savedContent.getCategory()).withRel("query-content"));
         resources.add(selfLinkBuilder.withSelfRel());
-        resources.add(linkTo(ContentController.class).slash(savedContent.getCategory()).withRel("list"));
+        resources.add(selfLinkBuilder.withRel("update-content"));
         resources.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
         
         return ResponseEntity.created(uri).body(resources);
