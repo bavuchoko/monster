@@ -5,7 +5,9 @@ import com.example.monster.contents.repository.ContentJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -31,9 +33,14 @@ public class ContentService {
     @Autowired
     ContentJpaRepository contentJpaRepository;
 
+    public Page<Content> getContentListAll(Pageable pageable) {
+        return contentJpaRepository.findAllByOrderByWriteTimeDesc(pageable);
+    }
+
+
     //Todo 제목 100자 이상 ... 대체, 내용 150글자 이상 ... 대체
-    public Page<Content> getContentListAll(String category, Pageable pageable) {
-        return contentJpaRepository.findContentByCategory(category, pageable);
+    public Page<Content> getContentCategoryListAll(String category, Pageable pageable) {
+        return contentJpaRepository.findContentByCategoryOrderByWriteTimeDesc(category, pageable);
     }
 
     public Content createContent(Content content) {

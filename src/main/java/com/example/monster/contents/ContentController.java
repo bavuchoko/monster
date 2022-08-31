@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -54,7 +56,21 @@ public class ContentController {
     }
 
     /**
-     * 리스트 조회
+     * 전체 리스트 조회
+     * */
+    @GetMapping
+    @PreAuthorize("permitAll()")
+    public ResponseEntity listAllPage(
+            Pageable pageable,
+            PagedResourcesAssembler<Content> assembler,
+            @CurrentUser Account account){
+        Page<Content> page = this.contentService.getContentListAll(pageable);
+        var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
+        pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
+        return ResponseEntity.ok().body(pageResources);
+    }
+    /**
+     * 카테고리 리스트 조회
      * */
     @GetMapping("{category}")
     @PreAuthorize("permitAll()")
@@ -64,7 +80,7 @@ public class ContentController {
             @PathVariable String category,
             @CurrentUser Account account){
 
-        Page<Content> page = this.contentService.getContentListAll(category, pageable);
+        Page<Content> page = this.contentService.getContentCategoryListAll(category, pageable);
         var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
         return ResponseEntity.ok().body(pageResources);
