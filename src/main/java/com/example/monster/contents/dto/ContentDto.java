@@ -22,11 +22,14 @@ public class ContentDto {
     private static ModelMapper modelMapper = new ModelMapper();
 
     private String category;
+    private String thumbnail;
     @NotEmpty
     private String title;
     @NotEmpty
     private String body;
     @NotEmpty
+    private String bodyHtml;
+
     private String bodyPreView;
     private LocalDateTime writeTime;
 

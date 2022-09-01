@@ -33,7 +33,8 @@ public class Content {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String body;
-    private String bodyPreView;
+    private String bodyHtml;
+    private String thumbnail;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime writeTime;

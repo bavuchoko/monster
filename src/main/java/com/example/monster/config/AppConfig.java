@@ -1,6 +1,7 @@
 package com.example.monster.config;
 
 import com.example.monster.accounts.service.AccountService;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -9,6 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Configuration
 public class AppConfig {
@@ -48,5 +52,13 @@ public class AppConfig {
 //                accountService.saveMember(user);
             }
         };
+    }
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory(){
+        return new JPAQueryFactory(entityManager);
     }
 }
