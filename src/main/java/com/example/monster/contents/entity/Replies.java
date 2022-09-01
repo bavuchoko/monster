@@ -32,4 +32,13 @@ public class Replies implements Serializable {
     @JoinColumn(name="member_id")
     @JsonSerialize(using = AccountSerializer.class)
     private Account account;
+
+//
+//    @ManyToOne
+//    @JoinColumns({
+//            @JoinColumn(name="content_id", referencedColumnName = "content_id"),
+//            @JoinColumn(name="category", referencedColumnName = "category")
+//    })
+//    private Content content;
+
 }

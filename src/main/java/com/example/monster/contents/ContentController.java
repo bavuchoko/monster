@@ -6,6 +6,7 @@ import com.example.monster.accounts.entity.Account;
 import com.example.monster.contents.dto.ContentDto;
 import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.entity.ContentImage;
+import com.example.monster.contents.repository.ContentRepositorySupport;
 import com.example.monster.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -49,6 +50,7 @@ public class ContentController {
 
 
     private final ContentService contentService;
+    private final ContentRepositorySupport ContentRepositorySupport;
     private final ModelMapper modelMapper;
 
     private ResponseEntity<EntityModel<Errors>> badRequest(Errors errors) {
@@ -64,7 +66,7 @@ public class ContentController {
             Pageable pageable,
             PagedResourcesAssembler<Content> assembler,
             @CurrentUser Account account){
-        Page<Content> page = this.contentService.getContentListAll(pageable);
+        Page<Content> page = this.ContentRepositorySupport.quertFindOrderByWriteTimeDesc(pageable);
         var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
         return ResponseEntity.ok().body(pageResources);

@@ -53,16 +53,12 @@ public class Content {
     public void categorySetter(String category) {
         this.category=category;
     }
+
     @OneToMany(cascade=CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumns(value = {
-        @JoinColumn(name = "content_id", updatable = false, insertable = false),
-        @JoinColumn(name = "category", updatable = false, insertable = false)
+        @JoinColumn(name = "content_id", referencedColumnName = "content_id"),
+        @JoinColumn(name = "category",  referencedColumnName = "category")
     })
     private List<Replies> replies = new ArrayList<>();
-
-    private boolean isVisible = true;
-
-//    @Transient
-//    private String thumbnail;
 
 }
