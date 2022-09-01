@@ -77,7 +77,7 @@ public class ContentControllerTest extends BaseControllerTest {
                 .title("제목")
                 .body("내용")
                 .category("java")
-                .bodyPreView("내용")
+                .bodyHtml("내용")
                 .writeTime(LocalDateTime.of(2022,8,05,14,30))
                 .build();
 
@@ -104,7 +104,7 @@ public class ContentControllerTest extends BaseControllerTest {
                                 relaxedRequestFields(
                                         fieldWithPath("title").description("게시글의 제목"),
                                         fieldWithPath("body").description("HTML 태그 형태의 게시글 본문"),
-                                        fieldWithPath("bodyPreView").description("이지웍 형태의 게시글 본문 > 미리보기"),
+                                        fieldWithPath("bodyHtml").description("이지웍 형태의 게시글 본문 > 미리보기"),
                                         fieldWithPath("writeTime").description("게시글 작성 일자")
                                 ),
                                 responseHeaders(
@@ -116,7 +116,7 @@ public class ContentControllerTest extends BaseControllerTest {
                                         fieldWithPath("id").description("게시글의 식별자"),
                                         fieldWithPath("title").description("게시글의 제목"),
                                         fieldWithPath("body").description("HTML 형태의 본문"),
-                                        fieldWithPath("bodyPreView").description("이지웍 형태의 본문 150자 > 미리보기"),
+                                        fieldWithPath("bodyHtml").description("이지웍 형태의 본문 150자 > 미리보기"),
                                         fieldWithPath("writeTime").description("작성일자"),
                                         fieldWithPath("updateTime").description("수정일자"),
                                         fieldWithPath("_links.self.href").description("자기 자신 링크"),
@@ -173,8 +173,7 @@ public class ContentControllerTest extends BaseControllerTest {
         Content content = Content.builder()
                 .title("title" + i)
                 .body("test content")
-                .bodyPreView("body preview")
-                .isVisible(true)
+                .bodyHtml("body html")
                 .writeTime(LocalDateTime.of(2022, 6, 17, 14, 21))
                 .category("JAVA")
                 .build();
