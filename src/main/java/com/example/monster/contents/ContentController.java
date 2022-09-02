@@ -133,8 +133,10 @@ public class ContentController {
         WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(loadedContent.getCategory()).slash(loadedContent.getId());
         EntityModel resource = EntityModel.of(loadedContent);
         resource.add(selfLinkBuilder.withSelfRel());
-        resource.add(selfLinkBuilder.withRel("update"));
         resource.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
+        if(loadedContent.getAccount().equals(account)){
+            resource.add(selfLinkBuilder.withRel("update"));
+        }
 
         return ResponseEntity.ok().body(resource);
     }
@@ -187,18 +189,18 @@ public class ContentController {
             @PathVariable String id,
             @CurrentUser Account account) {
         Long contentId = Long.valueOf(id);
-        Optional<Content> loadedConetnt = contentService.getSingleContent(category,contentId);
+        Optional<Content> singleContent = contentService.getSingleContent(category,contentId);
 
-        if(loadedConetnt.isEmpty()){
+        if(singleContent.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
         if (errors.hasErrors()) {
             return badRequest(errors);
         }
-        Content contentEntity = loadedConetnt.get();
+        Content loadedConetnt = singleContent.get();
 
-        if (!contentEntity.getAccount().equals(account)) {
+        if (!loadedConetnt.getAccount().equals(account)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("aa");
         }
 
@@ -223,19 +225,19 @@ public class ContentController {
             @CurrentUser Account account) {
 
         Long contentId = Long.valueOf(id);
-        Optional<Content> loadedConetnt = contentService.getSingleContent(category, contentId);
+        Optional<Content> singleContent = contentService.getSingleContent(category, contentId);
 
-        if(loadedConetnt.isEmpty()){
+        if(singleContent.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
-        Content deleteContent = loadedConetnt.get();
+        Content loadedConetnt = singleContent.get();
 
-        if (!deleteContent.getAccount().equals(account)) {
+        if (!loadedConetnt.getAccount().equals(account)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("aa");
         }
-        contentService.deleteContent(deleteContent);
-        EntityModel resource = EntityModel.of(deleteContent);
+        contentService.deleteContent(loadedConetnt);
+        EntityModel resource = EntityModel.of(loadedConetnt);
         return ResponseEntity.ok(resource);
     }
 

@@ -42,7 +42,7 @@ public class Content {
     private LocalDateTime updateTime;
     private int hitCout;
     @ManyToOne(fetch =FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="account_id")
     @JsonSerialize(using = AccountSerializer.class)
     private Account account;
 

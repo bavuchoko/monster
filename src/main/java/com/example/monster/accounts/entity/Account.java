@@ -18,7 +18,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "member_id")
+    @Column(name = "account_id")
     private Integer id;
 
     @Column(unique = true)
