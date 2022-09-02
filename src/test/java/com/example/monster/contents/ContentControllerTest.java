@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Description;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
@@ -28,6 +29,8 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,6 +70,13 @@ public class ContentControllerTest extends BaseControllerTest {
                         .andExpect(jsonPath("page").exists())
                         .andExpect(jsonPath("_links.profile").exists())
                         .andDo(document("query-content",
+                                preprocessRequest(
+                                        Preprocessors.modifyUris()
+                                                .scheme("https")
+                                                .host("pjs.or.kr")
+                                                .port(8080)
+
+                                ),
                                 links(
                                     linkWithRel("profile").description("프로필"),
                                     linkWithRel("first").description("첫페이지 링크"),
@@ -114,6 +124,13 @@ public class ContentControllerTest extends BaseControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
                         .andDo(document("create-content",
+                                preprocessRequest(
+                                        Preprocessors.modifyUris()
+                                        .scheme("https")
+                                        .host("pjs.or.kr")
+                                        .port(8080)
+
+                                ),
                                 links(
                                     linkWithRel("self").description("자기 자신의 링크"),
                                     linkWithRel("query-content").description("리스트 조회 링크"),
