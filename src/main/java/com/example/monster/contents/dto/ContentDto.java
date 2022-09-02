@@ -32,7 +32,6 @@ public class ContentDto {
     private LocalDateTime writeTime;
 
 
-
     private LocalDateTime updateTime;
     @Min(0)
     private int hitCout;

@@ -9,6 +9,7 @@ import com.example.monster.config.security.jwt.TokenManagerImpl;
 import com.example.monster.contents.dto.ContentDto;
 import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.repository.ContentJpaRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;
@@ -65,7 +66,32 @@ public class ContentControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("page").exists())
                 .andExpect(jsonPath("_embedded.contentList[0]._links.self").exists())
                 .andExpect(jsonPath("_links.profile").exists())
-                .andDo(document("query-content"));
+                .andDo(document("query-content",
+                        links(
+                                linkWithRel("query-content").description("리스트 조회 링크"),
+                                linkWithRel("profile").description("프로필")
+                                ),
+                                relaxedRequestFields(
+                                        fieldWithPath("category").description("게시글의 대분류{java,springboot,database}")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION).description("Location header"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("HAL JSON TYPE")
+                                ),
+                                relaxedResponseFields(
+                                        //                        responseFields(
+                                        fieldWithPath("id").description("게시글의 식별자"),
+                                        fieldWithPath("title").description("게시글의 제목"),
+                                        fieldWithPath("body").description("HTML 형태의 본문"),
+                                        fieldWithPath("bodyHtml").description("이지웍 형태의 본문 150자 > 미리보기"),
+                                        fieldWithPath("writeTime").description("작성일자"),
+                                        fieldWithPath("updateTime").description("수정일자"),
+                                        fieldWithPath("_links.self.href").description("자기 자신 링크"),
+                                        fieldWithPath("_links.query-content.href").description("리스트 조회 링크"),
+                                        fieldWithPath("_links.update-content.href").description("수정 링크"),
+                                        fieldWithPath("_links.profile.href").description("프로필")
+                                )
+                        ));
     }
 
 
@@ -126,11 +152,71 @@ public class ContentControllerTest extends BaseControllerTest {
                                 )
                         ));
     }
-    
-    
-    //Todo 유저정보 없이 등록 테스트 401
-    //Todo 게시글 필수내용 없이 등록테스트 400
+
+
+    @Test
+    @Description("유저정보 없이 등록 테스트")
+    public void createContentWithowUser() throws Exception {
+        ContentDto content = ContentDto.builder()
+                .title("제목")
+                .body("내용")
+                .category("java")
+                .bodyHtml("내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .build();
+        mockMvc.perform(post("/api/content/{category}", "java")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(content)))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Description("게시글 필수내용 없이 등록테스트 400")
+    public void createContentWithowNessesaryFileds() throws Exception {
+        ContentDto content = ContentDto.builder()
+                .title("제목")
+                .bodyHtml("내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .build();
+        mockMvc.perform(post("/api/content/{category}", "java")
+                .header(HttpHeaders.AUTHORIZATION, getBaererToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(content)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
     //Todo 상세조회 테스트 200
+    @Test
+    @Description(" 상세조회 테스트 200")
+    public void singleView() throws Exception {
+        Account account = Account.builder()
+                .id(1)
+                .username("admin@email.com")
+                .password("amin")
+                .build();
+
+        Account  user =  accountService.saveMember(account);
+        Content content = Content.builder()
+                .title("제목")
+                .account(user)
+                .body("내용")
+                .category("java")
+                .bodyHtml("내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .build();
+
+        Content saved = contentJpaRepository.save(content);
+
+        mockMvc.perform(get("/api/content/{category}/{id}", saved.getCategory(),saved.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
 
     //Todo 적법한 수정 테스트 200
     //Todo 유저정보없이 수정 테스트 401

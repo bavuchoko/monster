@@ -134,7 +134,7 @@ public class ContentController {
         EntityModel resource = EntityModel.of(loadedContent);
         resource.add(selfLinkBuilder.withSelfRel());
         resource.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
-        if(loadedContent.getAccount().equals(account)){
+        if( loadedContent.getAccount().equals(account)){
             resource.add(selfLinkBuilder.withRel("update"));
         }
 

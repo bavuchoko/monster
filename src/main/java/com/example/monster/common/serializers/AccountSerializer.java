@@ -13,7 +13,6 @@ public class AccountSerializer extends JsonSerializer<Account> {
     public void serialize(Account value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
         gen.writeNumberField("id", value.getId());
-        gen.writeStringField("username", value.getUsername());
         gen.writeStringField("nickname", value.getNickname());
         gen.writeEndObject();
     }
