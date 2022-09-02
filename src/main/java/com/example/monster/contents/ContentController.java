@@ -67,7 +67,7 @@ public class ContentController {
             PagedResourcesAssembler<Content> assembler,
             @CurrentUser Account account){
         Page<Content> page = this.ContentRepositorySupport.quertFindOrderByWriteTimeDesc(pageable);
-        var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
+        var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getCategory()).withRel("query-content")));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
         return ResponseEntity.ok().body(pageResources);
     }
@@ -83,7 +83,12 @@ public class ContentController {
             @CurrentUser Account account){
 
         Page<Content> page = this.contentService.getContentCategoryListAll(category, pageable);
-        var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getId()).withSelfRel()));
+        var pageResources = assembler.toModel(page,entity ->
+                EntityModel.of(entity).
+                        add(linkTo(ContentController.class).slash(entity.getCategory()).withRel("query-content")).
+                        add(linkTo(ContentController.class).slash(entity.getCategory()).slash(entity.getId()).withSelfRel())
+        );
+
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
         return ResponseEntity.ok().body(pageResources);
     }

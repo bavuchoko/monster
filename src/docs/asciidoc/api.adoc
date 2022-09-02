@@ -62,10 +62,11 @@ endif::[]
 응답은 http://stateless.co/hal_specification.html[Hypertext Application from resource to resource. Language (HAL)] 형식을 따른다.
 링크는 `_links`라는 키로 제공한다. 본 API의 사용자(클라이언트)는 URI를 직접 생성하지 않아야 하며, 리소스에서 제공하는 링크를 사용해야 한다.
 
-[[resources-content-create]]
+[[resources-query-content]]
 === 이벤트 조회
 `GET` 요청을 사용하여 서비스의 모든 이벤트를 조회할 수 있다.
-
+=== Curl request
+include::{snippets}/query-content/curl-request.adoc[]
 
 [[resources-content-create]]
 === 이벤트 생성
