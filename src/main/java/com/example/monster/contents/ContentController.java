@@ -138,7 +138,7 @@ public class ContentController {
         WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(loadedContent.getCategory()).slash(loadedContent.getId());
         EntityModel resource = EntityModel.of(loadedContent);
         resource.add(selfLinkBuilder.withSelfRel());
-        resource.add(Link.of("/docs/asciidoc/api.html#resources-content-create").withRel("profile"));
+        resource.add(Link.of("/docs/asciidoc/api.html#resources-query-content").withRel("profile"));
         if( loadedContent.getAccount().equals(account)){
             resource.add(selfLinkBuilder.withRel("update"));
         }
@@ -211,8 +211,9 @@ public class ContentController {
 
         Content contentForUpdate = contentService.createContent(contentDto.toEntity());
         EntityModel resource = EntityModel.of(contentForUpdate);
+        resource.add(linkTo(ContentController.class).slash(contentForUpdate.getCategory()).withRel("query-content"));
         resource.add(Link.of("/docs/api.html#resources-content-update").withRel("profile"));
-        return ResponseEntity.ok(resource);
+        return ResponseEntity.noContent().build();
     }
 
     /**

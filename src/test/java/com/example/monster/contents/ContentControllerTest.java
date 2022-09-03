@@ -114,7 +114,6 @@ public class ContentControllerTest extends BaseControllerTest {
                 .bodyHtml("내용")
                 .writeTime(LocalDateTime.of(2022,8,05,14,30))
                 .build();
-
         mockMvc.perform(post("/api/content/{category}", "java")
                         .header(HttpHeaders.AUTHORIZATION, getBaererToken(2))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -208,7 +207,7 @@ public class ContentControllerTest extends BaseControllerTest {
     @Description(" 상세조회 테스트 200")
     public void singleView() throws Exception {
         Account account = Account.builder()
-                .username("admin22@email.com")
+                .username("admin20@email.com")
                 .password("amin")
                 .nickname("nick")
                 .build();
@@ -233,7 +232,44 @@ public class ContentControllerTest extends BaseControllerTest {
     }
 
 
-    //Todo 적법한 수정 테스트 200
+    @Test
+    @Description("적법한 수정 테스트 200")
+    public void updateContent() throws Exception {
+        Account account = Account.builder()
+                .username("admin22@email.com")
+                .password("amin")
+                .nickname("nick")
+                .build();
+
+        Account  user =  accountService.saveMember(account);
+        Content content = Content.builder()
+                .title("제목")
+                .account(user)
+                .body("내용")
+                .category("java")
+                .bodyHtml("내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .build();
+
+        Content saved = contentJpaRepository.save(content);
+
+        Content updateContent = Content.builder()
+                .title("수정된 제목")
+                .account(user)
+                .body("수정된 내용")
+                .category("java")
+                .bodyHtml("수정된 내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .updateTime(LocalDateTime.of(2022,8,06,14,30))
+                .build();
+
+        mockMvc.perform(get("/api/content/{category}/{id}", saved.getCategory(),saved.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(updateContent)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
     //Todo 유저정보없이 수정 테스트 401
     //Todo 다른유저 수정 테스트 401
 
