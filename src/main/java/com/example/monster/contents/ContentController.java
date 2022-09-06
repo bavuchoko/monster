@@ -203,16 +203,17 @@ public class ContentController {
         if (errors.hasErrors()) {
             return badRequest(errors);
         }
+
         Content loadedConetnt = singleContent.get();
 
         if (!loadedConetnt.getAccount().equals(account)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("aa");
         }
 
-        Content contentForUpdate = contentService.createContent(contentDto.toEntity());
-        EntityModel resource = EntityModel.of(contentForUpdate);
-        resource.add(linkTo(ContentController.class).slash(contentForUpdate.getCategory()).withRel("query-content"));
-        resource.add(Link.of("/docs/api.html#resources-content-update").withRel("profile"));
+        loadedConetnt.changeTitle(contentDto.getTitle());
+        loadedConetnt.changeBody(contentDto.getBody());
+        loadedConetnt.changeBodyHtml(contentDto.getBodyHtml());
+        loadedConetnt.changeUpdateTime(contentDto.getUpdateTime());
         return ResponseEntity.noContent().build();
     }
 

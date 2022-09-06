@@ -61,4 +61,17 @@ public class Content {
     })
     private List<Replies> replies = new ArrayList<>();
 
+    public void changeTitle(String title){
+        this.title = title;
+    }
+    public void changeBody(String body){
+        this.body = body;
+    }
+    public void changeBodyHtml(String bodyHtml){
+        this.bodyHtml = bodyHtml;
+    }
+    public void changeUpdateTime(LocalDateTime updateTime){
+        this.updateTime = updateTime;
+    }
+
 }

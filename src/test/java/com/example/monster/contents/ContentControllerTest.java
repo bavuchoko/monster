@@ -233,15 +233,18 @@ public class ContentControllerTest extends BaseControllerTest {
 
 
     @Test
-    @Description("적법한 수정 테스트 200")
+    @Description("적법한 수정 테스트 204")
     public void updateContent() throws Exception {
+        HttpServletResponse response = mock(HttpServletResponse.class);
         Account account = Account.builder()
                 .username("admin22@email.com")
                 .password("amin")
                 .nickname("nick")
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
 
         Account  user =  accountService.saveMember(account);
+        String Token = this.accountService.authirize(user.getUsername(), "amin", response).getToken();
         Content content = Content.builder()
                 .title("제목")
                 .account(user)
@@ -253,18 +256,17 @@ public class ContentControllerTest extends BaseControllerTest {
 
         Content saved = contentJpaRepository.save(content);
 
-        Content updateContent = Content.builder()
+        ContentDto updateContent = ContentDto.builder()
                 .title("수정된 제목")
-                .account(user)
                 .body("수정된 내용")
                 .category("java")
                 .bodyHtml("수정된 내용")
-                .writeTime(LocalDateTime.of(2022,8,05,14,30))
-                .updateTime(LocalDateTime.of(2022,8,06,14,30))
+                .updateTime(LocalDateTime.of(2022,9,05,14,30))
                 .build();
 
-        mockMvc.perform(get("/api/content/{category}/{id}", saved.getCategory(),saved.getId())
+        mockMvc.perform(put("/api/content/{category}/{id}", saved.getCategory(),saved.getId())
                 .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer "+Token)
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(updateContent)))
                 .andDo(print())
