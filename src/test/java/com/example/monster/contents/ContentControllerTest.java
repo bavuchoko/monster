@@ -143,7 +143,7 @@ public class ContentControllerTest extends BaseControllerTest {
                                 ),
                                 relaxedRequestFields(
                                     fieldWithPath("title").description("게시글의 제목"),
-                                    fieldWithPath("body").description("HTML 태그 형태의 게시글 본문"),
+                                    fieldWithPath("body").description("markdown 태그 형태의 게시글 본문"),
                                     fieldWithPath("bodyHtml").description("이지웍 형태의 게시글 본문 > 미리보기"),
                                     fieldWithPath("writeTime").description("게시글 작성 일자")
                                 ),
@@ -270,12 +270,150 @@ public class ContentControllerTest extends BaseControllerTest {
                 .accept(MediaTypes.HAL_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(updateContent)))
                 .andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("update-content",
+                        preprocessRequest(
+                                Preprocessors.modifyUris()
+                                        .scheme("https")
+                                        .host("pjs.or.kr")
+                                        .port(8080)
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT).description("accept header"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header"),
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer Token")
+                        ),
+                        relaxedRequestFields(
+                                fieldWithPath("title").description("게시글의 제목"),
+                                fieldWithPath("body").description("markdown 태그 형태의 게시글 본문"),
+                                fieldWithPath("bodyHtml").description("이지웍 형태의 게시글 본문 > 미리보기"),
+                                fieldWithPath("updateTime").description("게시글 수정 일자")
+                        )
+                ));
+    }
+
+    @Description("유저정보없이 수정 테스트 401")
+    @Test
+    public void updateWithoutUser() throws Exception {
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        Account account = Account.builder()
+                .username("admin22@email.com")
+                .password("amin")
+                .nickname("nick")
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                .build();
+
+        Account  user =  accountService.saveMember(account);
+        Content content = Content.builder()
+                .title("제목")
+                .account(user)
+                .body("내용")
+                .category("java")
+                .bodyHtml("내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .build();
+
+        Content saved = contentJpaRepository.save(content);
+
+        ContentDto updateContent = ContentDto.builder()
+                .title("수정된 제목")
+                .body("수정된 내용")
+                .category("java")
+                .bodyHtml("수정된 내용")
+                .updateTime(LocalDateTime.of(2022,9,05,14,30))
+                .build();
+
+        mockMvc.perform(put("/api/content/{category}/{id}", saved.getCategory(),saved.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(updateContent)))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Description("다른 유저 수정 테스트 401")
+    @Test
+    public void updateByAnotherUser() throws Exception {
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        Account account = Account.builder()
+                .username("admin22@email.com")
+                .password("amin")
+                .nickname("nick")
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                .build();
+
+        Account account2 = Account.builder()
+                .username("admin122@email.com")
+                .password("amin2")
+                .nickname("nick2")
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                .build();
+        Account  user =  accountService.saveMember(account);
+        Account  user2 =  accountService.saveMember(account2);
+        String Token = this.accountService.authirize(user2.getUsername(), "amin2", response).getToken();
+
+        Content content = Content.builder()
+                .title("제목")
+                .account(user)
+                .body("내용")
+                .category("java")
+                .bodyHtml("내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .build();
+
+        Content saved = contentJpaRepository.save(content);
+
+        ContentDto updateContent = ContentDto.builder()
+                .title("수정된 제목")
+                .body("수정된 내용")
+                .category("java")
+                .bodyHtml("수정된 내용")
+                .updateTime(LocalDateTime.of(2022,9,05,14,30))
+                .build();
+
+        mockMvc.perform(put("/api/content/{category}/{id}", saved.getCategory(),saved.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer "+Token)
+                .accept(MediaTypes.HAL_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(updateContent)))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Description("적법한 삭제 테스트 204")
+    @Test
+    public void deleteContent() throws Exception {
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        Account account = Account.builder()
+                .username("admin22@email.com")
+                .password("amin")
+                .nickname("nick")
+                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                .build();
+
+        Account  user =  accountService.saveMember(account);
+        String Token = this.accountService.authirize(user.getUsername(), "amin", response).getToken();
+        Content content = Content.builder()
+                .title("제목")
+                .account(user)
+                .body("내용")
+                .category("java")
+                .bodyHtml("내용")
+                .writeTime(LocalDateTime.of(2022,8,05,14,30))
+                .build();
+
+        Content saved = contentJpaRepository.save(content);
+
+
+        mockMvc.perform(delete("/api/content/{category}/{id}", saved.getCategory(),saved.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer "+Token)
+                .accept(MediaTypes.HAL_JSON_VALUE))
+                .andDo(print())
                 .andExpect(status().isNoContent());
     }
-    //Todo 유저정보없이 수정 테스트 401
-    //Todo 다른유저 수정 테스트 401
-
-    //Todo 적법한 삭제 테스트 200
     //Todo 유저정보없이 삭제 테스트 401
     //Todo 다른유저 삭제 테스트 401
     

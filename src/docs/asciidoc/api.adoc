@@ -63,9 +63,9 @@ endif::[]
 링크는 `_links`라는 키로 제공한다. 본 API의 사용자(클라이언트)는 URI를 직접 생성하지 않아야 하며, 리소스에서 제공하는 링크를 사용해야 한다.
 
 [[resources-query-content]]
-== 이벤트 조회
+== 게시글 조회
 === REQUEST
-`GET` 요청을 사용하여 서비스의 모든 이벤트를 조회할 수 있다.
+`GET` 요청을 사용하여 서비스의 모든 게시글을 조회할 수 있다.
 
 [[resources-query-content_curl_request]]
 ===== -Curl request
@@ -89,9 +89,9 @@ include::{snippets}/create-content/response-fields.adoc[]
 
 
 [[resources-content-create]]
-== 이벤트 생성
+== 게시글 생성
 === REQUEST
-`POST` 요청을 사용해서 새 이벤트를 만들 수 있다.
+`POST` 요청을 사용해서 새 게시글을 만들 수 있다.
 
 
 [[resources-content-create_curl_request]]
@@ -131,3 +131,33 @@ include::{snippets}/create-content/response-headers.adoc[]
 [[resources-content_reponse_fields]]
 ===== -HTTP response fields
 include::{snippets}/create-content/response-fields.adoc[]
+
+
+
+
+== 게시글 수정
+=== REQUEST
+`PUT` 요청을 사용하여 서비스의 게시글을 수정할 수 있다.
+
+[[resources-update-content_curl_request]]
+===== -Curl request
+include::{snippets}/update-content/curl-request.adoc[]
+
+[[resources-update-content_http_request]]
+===== -HTTP request
+include::{snippets}/update-content/http-request.adoc[]
+
+
+[[resources-content-update_request-header]]
+===== -Request header
+include::{snippets}/update-content/request-headers.adoc[]
+
+[[resources-content--update_request-fields]]
+===== -Request fileds
+include::{snippets}/update-content/request-fields.adoc[]
+
+
+[[example_request_body]]
+===== -request body
+include::{snippets}/update-content/request-body.adoc[]
+

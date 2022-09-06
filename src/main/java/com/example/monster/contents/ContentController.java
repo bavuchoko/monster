@@ -206,6 +206,10 @@ public class ContentController {
 
         Content loadedConetnt = singleContent.get();
 
+
+        Account ac = loadedConetnt.getAccount();
+        Account ac2 = account;
+        String a = ac.equals(ac2) ? "Y":"N";
         if (!loadedConetnt.getAccount().equals(account)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("aa");
         }
@@ -237,15 +241,13 @@ public class ContentController {
         if(singleContent.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-
         Content loadedConetnt = singleContent.get();
 
         if (!loadedConetnt.getAccount().equals(account)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("aa");
         }
         contentService.deleteContent(loadedConetnt);
-        EntityModel resource = EntityModel.of(loadedConetnt);
-        return ResponseEntity.ok(resource);
+        return ResponseEntity.noContent().build();
     }
 
 
