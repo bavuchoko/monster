@@ -67,7 +67,8 @@ public class SecurityConfig {
                         "/favicon.ico",
                         "/docs/**",
                         "/hello/**",
-                        "/imagePath/**"
+                        "/imagePath/**",
+                        "/docs/**"
                 );
     }
 

@@ -571,7 +571,7 @@ Host: pjs.or.kr:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "id" : 67,
+  "id" : 74,
   "category" : "java",
   "title" : "제목",
   "body" : "내용",
@@ -581,7 +581,7 @@ Host: pjs.or.kr:8080</code></pre>
   "updateTime" : null,
   "hitCout" : 0,
   "account" : {
-    "id" : 66,
+    "id" : 73,
     "nickname" : "nick"
   },
   "replies" : null,
@@ -590,10 +590,10 @@ Host: pjs.or.kr:8080</code></pre>
       "href" : "http://localhost:8080/api/content/java"
     },
     "self" : {
-      "href" : "http://localhost:8080/api/content/java/67"
+      "href" : "http://localhost:8080/api/content/java/74"
     },
     "update-content" : {
-      "href" : "http://localhost:8080/api/content/java/67"
+      "href" : "http://localhost:8080/api/content/java/74"
     },
     "profile" : {
       "href" : "/docs/asciidoc/api.html#resources-content-create"
@@ -689,7 +689,7 @@ Host: pjs.or.kr:8080</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'https://pjs.or.kr:8080/api/content/java' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXIyQG1haWwuY29tIiwiaWF0IjoxNjYyNDUyODUwLCJleHAiOjE2NjI1MzkyNTB9.K2RWm4iLzjUaP8pzNq3hBr2ZyYlkU9GBzfrItopMFE73ND7BQRcrAchlhpIV7NVrcFmtY-nsDHRNr3edBKdQiw' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXIyQG1haWwuY29tIiwiaWF0IjoxNjYyNTI0Mzk0LCJleHAiOjE2NjI2MTA3OTR9.TwURCLgCYodG3j_Lv7yiJb7fTB_Wsi_-UxDisaoqZgAYi8FxgIXEQNOnr_2UTbemeTbk9c4n-_6E_Ou1V7ZmJw' \
     -H 'Accept: application/hal+json' \
     -d '{
   "category" : "java",
@@ -711,7 +711,7 @@ Host: pjs.or.kr:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/content/java HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXIyQG1haWwuY29tIiwiaWF0IjoxNjYyNDUyODUwLCJleHAiOjE2NjI1MzkyNTB9.K2RWm4iLzjUaP8pzNq3hBr2ZyYlkU9GBzfrItopMFE73ND7BQRcrAchlhpIV7NVrcFmtY-nsDHRNr3edBKdQiw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6InVzZXIyQG1haWwuY29tIiwiaWF0IjoxNjYyNTI0Mzk0LCJleHAiOjE2NjI2MTA3OTR9.TwURCLgCYodG3j_Lv7yiJb7fTB_Wsi_-UxDisaoqZgAYi8FxgIXEQNOnr_2UTbemeTbk9c4n-_6E_Ou1V7ZmJw
 Accept: application/hal+json
 Content-Length: 224
 Host: pjs.or.kr:8080
@@ -783,7 +783,7 @@ Host: pjs.or.kr:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">HTML 태그 형태의 게시글 본문</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">markdown 태그 형태의 게시글 본문</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bodyHtml</code></p></td>
@@ -824,7 +824,7 @@ Host: pjs.or.kr:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "id" : 67,
+  "id" : 74,
   "category" : "java",
   "title" : "제목",
   "body" : "내용",
@@ -834,7 +834,7 @@ Host: pjs.or.kr:8080
   "updateTime" : null,
   "hitCout" : 0,
   "account" : {
-    "id" : 66,
+    "id" : 73,
     "nickname" : "nick"
   },
   "replies" : null,
@@ -843,10 +843,10 @@ Host: pjs.or.kr:8080
       "href" : "http://localhost:8080/api/content/java"
     },
     "self" : {
-      "href" : "http://localhost:8080/api/content/java/67"
+      "href" : "http://localhost:8080/api/content/java/74"
     },
     "update-content" : {
-      "href" : "http://localhost:8080/api/content/java/67"
+      "href" : "http://localhost:8080/api/content/java/74"
     },
     "profile" : {
       "href" : "/docs/asciidoc/api.html#resources-content-create"
@@ -967,7 +967,7 @@ Host: pjs.or.kr:8080
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'https://pjs.or.kr:8080/api/content/java/63' -i -X PUT \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6ImFkbWluMjJAZW1haWwuY29tIiwiaWF0IjoxNjYyNDUyODQ5LCJleHAiOjE2NjI1MzkyNDl9.mheV5GN900Kwq9MDcFZtmk3E2Drr7qEMATSC4_Q0828PSEKWp0-scMgAEwdqw-xGRMyfhxMsyM7k5EdF4j-hPQ' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6ImFkbWluMjJAZW1haWwuY29tIiwiaWF0IjoxNjYyNTI0MzkyLCJleHAiOjE2NjI2MTA3OTJ9.WVoCJTBqP-pKTB7w43avySgj6kbmeQTlTeDClvhOTNBXu77Zbie7mXoYSNw7x5Dg757cZ8cgpZlAXWX9slmHIw' \
     -H 'Accept: application/hal+json' \
     -d '{
   "category" : "java",
@@ -989,7 +989,7 @@ Host: pjs.or.kr:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/content/java/63 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6ImFkbWluMjJAZW1haWwuY29tIiwiaWF0IjoxNjYyNDUyODQ5LCJleHAiOjE2NjI1MzkyNDl9.mheV5GN900Kwq9MDcFZtmk3E2Drr7qEMATSC4_Q0828PSEKWp0-scMgAEwdqw-xGRMyfhxMsyM7k5EdF4j-hPQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6ImFkbWluMjJAZW1haWwuY29tIiwiaWF0IjoxNjYyNTI0MzkyLCJleHAiOjE2NjI2MTA3OTJ9.WVoCJTBqP-pKTB7w43avySgj6kbmeQTlTeDClvhOTNBXu77Zbie7mXoYSNw7x5Dg757cZ8cgpZlAXWX9slmHIw
 Accept: application/hal+json
 Content-Length: 254
 Host: pjs.or.kr:8080
@@ -1061,7 +1061,7 @@ Host: pjs.or.kr:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">HTML 태그 형태의 게시글 본문</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">markdown 태그 형태의 게시글 본문</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bodyHtml</code></p></td>
@@ -1097,11 +1097,74 @@ Host: pjs.or.kr:8080
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_게시글_삭제">게시글 삭제</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_request_4">REQUEST</h3>
+<div class="paragraph">
+<p><code>DELETE</code> 요청을 사용하여 서비스의 게시글을 삭제할 수 있다.</p>
+</div>
+<div class="sect4">
+<h5 id="resources-delete-content_curl_request">-Curl request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'https://pjs.or.kr:8080/api/content/java/65' -i -X DELETE \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6ImFkbWluMjNAZW1haWwuY29tIiwiaWF0IjoxNjYyNTI0MzkzLCJleHAiOjE2NjI2MTA3OTN9.A9N6F76FgO_j-GPMMeV4ERvf-jS8NY960doGPMfDTGZz8S0Oy1Qkzo2ZRNsd89O5WSEaYHwK-6YvEcORUVXMMA' \
+    -H 'Accept: application/hal+json'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="resources-delete-content_http_request">-HTTP request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/content/java/65 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJuaWNrbmFtZSI6Im5pY2siLCJ1c2VybmFtZSI6ImFkbWluMjNAZW1haWwuY29tIiwiaWF0IjoxNjYyNTI0MzkzLCJleHAiOjE2NjI2MTA3OTN9.A9N6F76FgO_j-GPMMeV4ERvf-jS8NY960doGPMfDTGZz8S0Oy1Qkzo2ZRNsd89O5WSEaYHwK-6YvEcORUVXMMA
+Accept: application/hal+json
+Host: pjs.or.kr:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="resources-content-delete_request-header">-Request header</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Accept</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accept header</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">content type header</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bearer Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-09-06 17:27:12 +0900
+Last updated 2022-09-07 13:19:25 +0900
 </div>
 </div>
 </body>

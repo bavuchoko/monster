@@ -161,3 +161,24 @@ include::{snippets}/update-content/request-fields.adoc[]
 ===== -request body
 include::{snippets}/update-content/request-body.adoc[]
 
+
+
+== 게시글 삭제
+=== REQUEST
+`DELETE` 요청을 사용하여 서비스의 게시글을 삭제할 수 있다.
+
+[[resources-delete-content_curl_request]]
+===== -Curl request
+include::{snippets}/delete-content/curl-request.adoc[]
+
+[[resources-delete-content_http_request]]
+===== -HTTP request
+include::{snippets}/delete-content/http-request.adoc[]
+
+
+[[resources-content-delete_request-header]]
+===== -Request header
+include::{snippets}/delete-content/request-headers.adoc[]
+
+
+

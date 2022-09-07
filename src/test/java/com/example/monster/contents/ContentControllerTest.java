@@ -297,7 +297,7 @@ public class ContentControllerTest extends BaseControllerTest {
     public void updateWithoutUser() throws Exception {
         HttpServletResponse response = mock(HttpServletResponse.class);
         Account account = Account.builder()
-                .username("admin22@email.com")
+                .username("admin25@email.com")
                 .password("amin")
                 .nickname("nick")
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
@@ -337,7 +337,7 @@ public class ContentControllerTest extends BaseControllerTest {
     public void updateByAnotherUser() throws Exception {
         HttpServletResponse response = mock(HttpServletResponse.class);
         Account account = Account.builder()
-                .username("admin22@email.com")
+                .username("admin24@email.com")
                 .password("amin")
                 .nickname("nick")
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
@@ -387,7 +387,7 @@ public class ContentControllerTest extends BaseControllerTest {
     public void deleteContent() throws Exception {
         HttpServletResponse response = mock(HttpServletResponse.class);
         Account account = Account.builder()
-                .username("admin22@email.com")
+                .username("admin23@email.com")
                 .password("amin")
                 .nickname("nick")
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
@@ -412,7 +412,20 @@ public class ContentControllerTest extends BaseControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer "+Token)
                 .accept(MediaTypes.HAL_JSON_VALUE))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-content",
+                        preprocessRequest(
+                                Preprocessors.modifyUris()
+                                        .scheme("https")
+                                        .host("pjs.or.kr")
+                                        .port(8080)
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT).description("accept header"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header"),
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer Token")
+                        )
+                ));
     }
     //Todo 유저정보없이 삭제 테스트 401
     //Todo 다른유저 삭제 테스트 401
