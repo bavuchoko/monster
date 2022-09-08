@@ -47,7 +47,11 @@ public class AccountService{
 
 
 
-    public Account saveMember(Account account) {
+    public Account saveAccount(Account account) {
+
+        accountJapRepository.findByUsername(account.getUsername()).ifPresent(e->{
+            throw new IllegalStateException("이미 가입된 이메일 입니다");
+        });
         account.setPassword(this.passwordEncoder.encode(account.getPassword()));
         return this.accountJapRepository.save(account);
     }

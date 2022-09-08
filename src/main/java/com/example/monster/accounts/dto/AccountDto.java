@@ -1,9 +1,14 @@
 package com.example.monster.accounts.dto;
 
+import com.example.monster.accounts.entity.Account;
 import com.example.monster.accounts.entity.AccountRole;
+import com.example.monster.contents.entity.Content;
 import lombok.*;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.Set;
 @Data
 @Builder
@@ -12,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class AccountDto {
 
+    private static ModelMapper modelMapper = new ModelMapper();
 
     private Integer id;
 
@@ -25,5 +31,14 @@ public class AccountDto {
     private Set<AccountRole> roles;
 
     private String token;
+
+    private LocalDateTime joinDate;
+
+    public Account toEntity() {
+        modelMapper.getConfiguration()
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+        return modelMapper.map(this, Account.class);
+    }
 }
 

@@ -2,6 +2,7 @@ package com.example.monster.accounts;
 
 import com.example.monster.accounts.dto.AccountDto;
 import com.example.monster.accounts.entity.Account;
+import com.example.monster.accounts.entity.AccountRole;
 import com.example.monster.accounts.service.AccountService;
 import com.example.monster.config.security.CustomResponseBody;
 import com.example.monster.config.security.filter.JwtFilter;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import java.util.Set;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -77,6 +80,30 @@ public class AccountController {
     }
 
 
+    @PostMapping("/join")
+    public ResponseEntity creatAccount(@Valid @RequestBody AccountDto accountDto,Errors errors, HttpServletResponse response) {
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+        try {
+            accountDto.setRoles(Set.of(AccountRole.USER));
+            Account account =accountDto.toEntity();
+            accountService.saveAccount(account);
+            CustomResponseBody accessToken = accountService.authirize(accountDto.getUsername(), accountDto.getPassword(), response);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken.getToken());
+            return new ResponseEntity(accessToken, httpHeaders, HttpStatus.OK);
+        }catch (IllegalStateException e){
+            CustomResponseBody customResponseBody = CustomResponseBody.builder()
+                    .success("true")
+                    .token(null)
+                    .username(null)
+                    .nickname(null)
+                    .message(e.getMessage())
+                    .build();
+            return new ResponseEntity(customResponseBody, HttpStatus.CONFLICT);
+        }
+    }
 
 
     //Todo 중요!!

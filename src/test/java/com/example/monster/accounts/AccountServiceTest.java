@@ -53,7 +53,7 @@ public class AccountServiceTest extends BaseControllerTest {
                 .password(appProperties.getUserPassword())
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
-        this.accountService.saveMember(account);
+        this.accountService.saveAccount(account);
 
         //When
 

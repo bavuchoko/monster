@@ -212,7 +212,7 @@ public class ContentControllerTest extends BaseControllerTest {
                 .nickname("nick")
                 .build();
 
-        Account  user =  accountService.saveMember(account);
+        Account  user =  accountService.saveAccount(account);
         Content content = Content.builder()
                 .title("제목")
                 .account(user)
@@ -243,7 +243,7 @@ public class ContentControllerTest extends BaseControllerTest {
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
 
-        Account  user =  accountService.saveMember(account);
+        Account  user =  accountService.saveAccount(account);
         String Token = this.accountService.authirize(user.getUsername(), "amin", response).getToken();
         Content content = Content.builder()
                 .title("제목")
@@ -303,7 +303,7 @@ public class ContentControllerTest extends BaseControllerTest {
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
 
-        Account  user =  accountService.saveMember(account);
+        Account  user =  accountService.saveAccount(account);
         Content content = Content.builder()
                 .title("제목")
                 .account(user)
@@ -349,8 +349,8 @@ public class ContentControllerTest extends BaseControllerTest {
                 .nickname("nick2")
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
-        Account  user =  accountService.saveMember(account);
-        Account  user2 =  accountService.saveMember(account2);
+        Account  user =  accountService.saveAccount(account);
+        Account  user2 =  accountService.saveAccount(account2);
         String Token = this.accountService.authirize(user2.getUsername(), "amin2", response).getToken();
 
         Content content = Content.builder()
@@ -393,7 +393,7 @@ public class ContentControllerTest extends BaseControllerTest {
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
 
-        Account  user =  accountService.saveMember(account);
+        Account  user =  accountService.saveAccount(account);
         String Token = this.accountService.authirize(user.getUsername(), "amin", response).getToken();
         Content content = Content.builder()
                 .title("제목")
@@ -449,7 +449,7 @@ public class ContentControllerTest extends BaseControllerTest {
                 .nickname(nickname)
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
-        this.accountService.saveMember(testUser);
+        this.accountService.saveAccount(testUser);
 
         String Token = this.accountService.authirize(testUser.getUsername(), password, response).getToken();
         return Token;
@@ -463,7 +463,7 @@ public class ContentControllerTest extends BaseControllerTest {
                 .password("amin")
                 .nickname("nick")
                 .build();
-        Account  user =  accountService.saveMember(account);
+        Account  user =  accountService.saveAccount(account);
         Content content = Content.builder()
                 .title("title" + i)
                 .body("test content")
