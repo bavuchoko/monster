@@ -2,9 +2,9 @@
 
 ### spring boot, rest-api, jpa, security-jwt 연습을 위한 Repositoy
 
-===게시글 조회
-====REQUEST
-=====GET 요청을 사용하여 서비스의 모든 게시글을 조회할 수 있다.
+###게시글 조회
+####REQUEST
+#####GET 요청을 사용하여 서비스의 모든 게시글을 조회할 수 있다.
 
 
 =====-Curl request
