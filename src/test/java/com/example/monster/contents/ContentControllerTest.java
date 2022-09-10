@@ -155,7 +155,7 @@ public class ContentControllerTest extends BaseControllerTest {
         //                          responseFields(
                                     fieldWithPath("id").description("게시글의 식별자"),
                                     fieldWithPath("title").description("게시글의 제목"),
-                                    fieldWithPath("body").description("HTML 형태의 본문"),
+                                    fieldWithPath("body").description("markdown 형태의 본문"),
                                     fieldWithPath("bodyHtml").description("이지웍 형태의 본문 150자 > 미리보기"),
                                     fieldWithPath("writeTime").description("작성일자"),
                                     fieldWithPath("updateTime").description("수정일자"),

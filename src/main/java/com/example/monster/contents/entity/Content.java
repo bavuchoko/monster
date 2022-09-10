@@ -33,6 +33,7 @@ public class Content {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String body;
+    @Column(columnDefinition = "TEXT")
     private String bodyHtml;
     private String thumbnail;
 

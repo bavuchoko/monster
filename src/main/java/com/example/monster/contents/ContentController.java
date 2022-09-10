@@ -218,6 +218,7 @@ public class ContentController {
         loadedConetnt.changeBody(contentDto.getBody());
         loadedConetnt.changeBodyHtml(contentDto.getBodyHtml());
         loadedConetnt.changeUpdateTime(contentDto.getUpdateTime());
+        contentService.createContent(loadedConetnt);
         return ResponseEntity.noContent().build();
     }
 

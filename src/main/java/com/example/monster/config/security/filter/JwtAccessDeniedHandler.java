@@ -44,11 +44,11 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         errMsg.put("status",403);
         errMsg.put("code",HttpStatus.FORBIDDEN);
         errMsg.put("message","접근 권한이 없습니다.");
-        try (OutputStream os = response.getOutputStream()) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(os, errMsg);
-            os.flush();
-        }
+            try (OutputStream os = response.getOutputStream()) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.writeValue(os, errMsg);
+                os.flush();
+            }
         }
     }
 }
