@@ -3,6 +3,7 @@ package com.example.monster.contents.entity;
 
 import com.example.monster.accounts.entity.Account;
 import com.example.monster.common.serializers.AccountSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +25,12 @@ public class Replies implements Serializable {
     @Column(name = "reply_id")
     private long id;
 
+    @Column(columnDefinition = "Text")
     private String body;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime writeTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
