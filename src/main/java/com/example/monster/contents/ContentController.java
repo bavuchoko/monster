@@ -8,6 +8,7 @@ import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.entity.ContentImage;
 import com.example.monster.contents.entity.Replies;
 import com.example.monster.contents.repository.ContentRepositorySupport;
+import com.example.monster.contents.service.ContentResources;
 import com.example.monster.contents.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -138,23 +139,12 @@ public class ContentController {
         Content loadedContent = singleContent.get();
         WebMvcLinkBuilder selfLinkBuilder = linkTo(ContentController.class).slash(loadedContent.getCategory()).slash(loadedContent.getId());
 
-        CollectionModel<EntityModel<Replies>> replies = CollectionModel.of(loadedContent.getReplies().stream().map(e->{
-            WebMvcLinkBuilder uri = linkTo(ContentController.class).slash(loadedContent.getCategory()).slash("replay").slash(e.getId());
-                    return e.getAccount().equals(account)? EntityModel.of(e).add(uri.withRel("update-reply"))
-                            .add(uri.withRel("delete-reply")): EntityModel.of(e);
-                }).collect(Collectors.toList())
-        );
 
-        EntityModel resource = EntityModel.of(loadedContent);
+        ContentResources replyAssembling = new ContentResources(loadedContent, account);
+        EntityModel resource = EntityModel.of(replyAssembling);
         resource.add(Link.of("/docs/asciidoc/api.html#resources-query-content").withRel("profile"));
         if( loadedContent.getAccount().equals(account)){
             resource.add(selfLinkBuilder.withRel("update"));
-        }
-        List<Replies> list =  loadedContent.getReplies();
-        for(int i=0; i<list.size(); i++){
-            if (list.get(i).getAccount().equals(account)) {
-
-            }
         }
         return ResponseEntity.ok().body(resource);
     }
