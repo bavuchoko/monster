@@ -55,12 +55,16 @@ public class Content {
         this.category=category;
     }
 
-    @OneToMany(cascade=CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumns(value = {
-        @JoinColumn(name = "content_id", referencedColumnName = "content_id"),
-        @JoinColumn(name = "category",  referencedColumnName = "category")
-    })
+    @OneToMany(cascade=CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "content")
+    @OrderBy("id asc")
     private List<Replies> replies = new ArrayList<>();
+
+    public void addReply(Replies reply) {
+        this.replies.add(reply);
+        if (reply.getContent() != this) {
+            reply.contentSetter(this);
+        }
+    }
 
     public void changeTitle(String title){
         this.title = title;

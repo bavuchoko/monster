@@ -284,6 +284,33 @@ public class ContentController {
     /**
      * 댓글 등록
      * */
+    @PostMapping("{category}/{id}/reply")
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity addReply(
+            @RequestBody @Valid Replies replies, Errors errors,
+            @PathVariable String category,
+            @PathVariable String id,
+            @CurrentUser Account account ) {
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+
+        if (!StringUtils.hasText(category) || !StringUtils.hasText(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Long contentId = Long.valueOf(id);
+        Optional<Content> singleContent = contentService.getSingleContent(category, contentId);
+
+        if (singleContent.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return  null;
+
+
+    }
+
 
     /**
      * 댓글 수정

@@ -17,8 +17,4 @@ public class MonsterApplication {
     public static void main(String[] args) {
         SpringApplication.run(MonsterApplication.class, args);
     }
-
-
-
-
 }

@@ -38,12 +38,19 @@ public class Replies implements Serializable {
     @JsonSerialize(using = AccountSerializer.class)
     private Account account;
 
-//
-//    @ManyToOne
-//    @JoinColumns({
-//            @JoinColumn(name="content_id", referencedColumnName = "content_id"),
-//            @JoinColumn(name="category", referencedColumnName = "category")
-//    })
-//    private Content content;
 
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name="content_id", referencedColumnName = "content_id"),
+            @JoinColumn(name="category", referencedColumnName = "category")
+    })
+    private Content content;
+
+    public void contentSetter(Content content) {
+        if(this.content != null){
+            this.content.getReplies().remove(this);
+        }
+        this.content =content;
+        content.getReplies().add(this);
+    }
 }
