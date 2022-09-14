@@ -4,6 +4,7 @@ package com.example.monster.contents.entity;
 import com.example.monster.accounts.entity.Account;
 import com.example.monster.common.serializers.AccountSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,7 @@ public class Replies implements Serializable {
 
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumns({
             @JoinColumn(name="content_id", referencedColumnName = "content_id"),
             @JoinColumn(name="category", referencedColumnName = "category")
@@ -51,6 +53,9 @@ public class Replies implements Serializable {
             this.content.getReplies().remove(this);
         }
         this.content =content;
-        content.getReplies().add(this);
+    }
+
+    public void accountSetter(Account account) {
+        this.account =account;
     }
 }

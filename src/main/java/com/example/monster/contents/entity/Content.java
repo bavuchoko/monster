@@ -59,12 +59,6 @@ public class Content {
     @OrderBy("id asc")
     private List<Replies> replies = new ArrayList<>();
 
-    public void addReply(Replies reply) {
-        this.replies.add(reply);
-        if (reply.getContent() != this) {
-            reply.contentSetter(this);
-        }
-    }
 
     public void changeTitle(String title){
         this.title = title;

@@ -4,12 +4,14 @@ package com.example.monster.contents;
 import com.example.monster.accounts.CurrentUser;
 import com.example.monster.accounts.entity.Account;
 import com.example.monster.contents.dto.ContentDto;
+import com.example.monster.contents.dto.RepliesDto;
 import com.example.monster.contents.entity.Content;
 import com.example.monster.contents.entity.ContentImage;
 import com.example.monster.contents.entity.Replies;
 import com.example.monster.contents.repository.ContentRepositorySupport;
 import com.example.monster.contents.service.ContentResources;
 import com.example.monster.contents.service.ContentService;
+import com.example.monster.contents.service.RepliesService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +54,7 @@ public class ContentController {
 
 
     private final ContentService contentService;
+    private final RepliesService repliesService;
     private final ContentRepositorySupport ContentRepositorySupport;
     private final ModelMapper modelMapper;
 
@@ -68,6 +71,7 @@ public class ContentController {
             Pageable pageable,
             PagedResourcesAssembler<Content> assembler,
             @CurrentUser Account account){
+//       Page<Content> page = contentService.getContentListAll(pageable);
         Page<Content> page = this.ContentRepositorySupport.quertFindOrderByWriteTimeDesc(pageable);
         var pageResources = assembler.toModel(page,entity -> EntityModel.of(entity).add(linkTo(ContentController.class).slash(entity.getCategory()).withRel("query-content")));
         pageResources.add(Link.of("/docs/ascidoc/api.html").withRel("profile"));
@@ -287,7 +291,7 @@ public class ContentController {
     @PostMapping("{category}/{id}/reply")
     @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity addReply(
-            @RequestBody @Valid Replies replies, Errors errors,
+            @RequestBody @Valid RepliesDto replies, Errors errors,
             @PathVariable String category,
             @PathVariable String id,
             @CurrentUser Account account ) {
@@ -305,10 +309,10 @@ public class ContentController {
         if (singleContent.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-
+        Content loadedContent = singleContent.get();
+        Replies reply = replies.toEntity();
+        repliesService.writeReply(reply);
         return  null;
-
-
     }
 
 
