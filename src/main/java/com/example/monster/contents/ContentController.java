@@ -311,17 +311,49 @@ public class ContentController {
         }
         Content loadedContent = singleContent.get();
         Replies reply = replies.toEntity();
+        reply.contentSetter(loadedContent);
+        reply.accountSetter(account);
         repliesService.writeReply(reply);
-        return  null;
+        return  ResponseEntity.ok().build();
+    }
+
+
+    /**
+     * 댓글 삭제
+     */
+    @DeleteMapping("/{category}/{contendId}/reply/{replyId}")
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity removeReply(
+            @PathVariable String category,
+            @PathVariable String contendId,
+            @PathVariable String replyId,
+            @CurrentUser Account account) {
+
+        if (!StringUtils.hasText(replyId)||!StringUtils.hasText(category)||!StringUtils.hasText(contendId)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Long cId = Long.valueOf(contendId);
+        Long rId = Long.valueOf(replyId);
+        Optional<Content> singleContent = contentService.getSingleContent(category, cId);
+        Optional<Replies> repliesOptional = repliesService.findById(rId);
+
+        if (singleContent.isEmpty() || repliesOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Replies replies = repliesOptional.get();
+        if (!replies.getAccount().equals(account)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        repliesService.removeReply(replies);
+        return ResponseEntity.noContent().build();
     }
 
 
     /**
      * 댓글 수정
-     * */
-
-    /**
-     * 댓글 삭제
      * */
 }
 
