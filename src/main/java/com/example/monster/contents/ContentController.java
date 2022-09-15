@@ -313,8 +313,11 @@ public class ContentController {
         Replies reply = replies.toEntity();
         reply.contentSetter(loadedContent);
         reply.accountSetter(account);
-        repliesService.writeReply(reply);
-        return  ResponseEntity.ok().build();
+        Replies savedReply = repliesService.writeReply(reply);
+        EntityModel resource = EntityModel.of(savedReply);
+        WebMvcLinkBuilder uri = linkTo(ContentController.class).slash(loadedContent.getCategory()).slash(loadedContent.getId()).slash("reply").slash(savedReply.getId());
+        resource.add(uri.withRel("update-reply")).add(uri.withRel("delete-reply"));
+        return  ResponseEntity.ok().body(resource);
     }
 
 
@@ -355,5 +358,43 @@ public class ContentController {
     /**
      * 댓글 수정
      * */
+    @PutMapping("/{category}/{contendId}/reply/{replyId}")
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity updateReply(
+            @RequestBody @Valid RepliesDto replies, Errors errors,
+            @PathVariable String category,
+            @PathVariable String contendId,
+            @PathVariable String replyId,
+            @CurrentUser Account account) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+
+        if (!StringUtils.hasText(category) || !StringUtils.hasText(contendId) || !StringUtils.hasText(replyId)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Long cId = Long.valueOf(contendId);
+        Long rId = Long.valueOf(replyId);
+        Optional<Content> singleContent = contentService.getSingleContent(category, cId);
+        Optional<Replies> repliesOptional = repliesService.findById(rId);
+
+        if (singleContent.isEmpty() || repliesOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Replies loadedReply = repliesOptional.get();
+        if (!loadedReply.getAccount().equals(account)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Content loadedContent = singleContent.get();
+        loadedReply.updateReply(replies.getBody(), replies.getUpdateTime());
+        repliesService.writeReply(loadedReply);
+        EntityModel resource = EntityModel.of(ContentResources.getRepliesModel(loadedContent, account));
+        return ResponseEntity.ok().body(resource);
+    }
+
 }
 

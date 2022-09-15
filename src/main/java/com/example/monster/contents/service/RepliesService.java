@@ -25,6 +25,10 @@ public class RepliesService {
         return repliesJpaRepository.findById(replyId);
     }
 
+    public Optional<Replies> findByContent(Content content){
+        return repliesJpaRepository.findByContent(content);
+    };
+
     public void removeReply(Replies reply) {
         repliesJpaRepository.delete(reply);
     }

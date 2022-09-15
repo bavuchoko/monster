@@ -64,9 +64,9 @@ public class ContentResources extends EntityModel<Content>{
         this.replies = getRepliesModel(content,account);
     }
 
-    private CollectionModel<EntityModel<RepliesResources>> getRepliesModel(Content content, Account account) {
+    public static CollectionModel<EntityModel<RepliesResources>> getRepliesModel(Content content, Account account) {
         return CollectionModel.of(content.getReplies().stream().map(e->{
-            WebMvcLinkBuilder uri = linkTo(ContentController.class).slash(content.getCategory()).slash(e.getId());
+            WebMvcLinkBuilder uri = linkTo(ContentController.class).slash(content.getCategory()).slash(e.getId()).slash("reply").slash(e.getId());
             return e.getAccount().equals(account) ? EntityModel.of(new RepliesResources(e)).add(uri.withRel("update-reply")).add(uri.withRel("delete-reply")) : EntityModel.of(new RepliesResources(e));
         }).collect(Collectors.toList()));
     }

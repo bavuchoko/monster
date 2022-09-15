@@ -58,4 +58,11 @@ public class Replies implements Serializable {
     public void accountSetter(Account account) {
         this.account =account;
     }
+
+
+    public void updateReply(String body, LocalDateTime updateTime){
+        this.body =body;
+        this.updateTime =updateTime;
+
+    }
 }
