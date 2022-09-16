@@ -64,6 +64,14 @@ public class ContentService {
         String uuid = UUID.randomUUID().toString();
 
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("originalFileName : "+originalFileName);
+        System.out.println("savePath : " +savePath);
+
         File folder = new File(savePath);
         if(!folder.exists()){
             try {
@@ -73,7 +81,12 @@ public class ContentService {
             }
         }
         String savedFileName= uuid + "_" + originalFileName;
-
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("savedFileName : " + savedFileName);
         file.transferTo(Paths.get(savePath + savedFileName));
 
         return savedFileName;
