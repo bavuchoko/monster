@@ -87,6 +87,15 @@ public class ContentService {
         System.out.println("=================");
         System.out.println("=================");
         System.out.println("savedFileName : " + savedFileName);
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("savePath & filename : "+ savePath + savedFileName);
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
+        System.out.println("=================");
         file.transferTo(Paths.get(savePath + savedFileName));
 
         return savedFileName;
